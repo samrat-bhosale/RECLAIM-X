@@ -13,6 +13,8 @@ import {
   DetectMaterialsInputSchema
 } from '../validation/schemas.js';
 
+import crypto from 'crypto';
+
 const router = express.Router();
 
 // POST /api/v1/ai/detect-materials (Image Material Identification Engine)
@@ -28,12 +30,33 @@ router.post('/detect-materials', async (req, res) => {
     }
 
     const { images, projectContext } = parsed.data;
+
+    // Verify dynamic payload length and hash on different uploads
+    const payloadSignatures = images.map((img, idx) => {
+      const cleanData = (img.data || '').split(',').pop() || '';
+      const hash = crypto.createHash('md5').update(cleanData).digest('hex').substring(0, 10);
+      return {
+        photoIndex: idx + 1,
+        filename: img.name || `photo_${idx + 1}.jpg`,
+        mimeType: img.mimeType || 'image/jpeg',
+        base64Length: cleanData.length,
+        hash: `md5:${hash}`
+      };
+    });
+
+    console.log('[RECLAIM X Vision] Inbound material scan request received:');
+    console.log(`  → Total images: ${images.length}`);
+    console.log(`  → Project context: "${projectContext?.name || 'New Project'}" (${projectContext?.buildingType || 'Commercial'})`);
+    console.log('  → Image signatures:', JSON.stringify(payloadSignatures));
+
     const result = await detectMaterialsFromImages(images, projectContext);
+
+    console.log(`[RECLAIM X Vision] Successfully generated ${result.detectedMaterials?.length || 0} material detection items for payload with hash: ${payloadSignatures[0]?.hash}`);
 
     // Record audit event in admin logs
     await dbService.recordAdminAuditLog({
       action: 'AI_IMAGE_DETECTION',
-      details: `Analyzed ${images.length} image(s); detected ${result.detectedMaterials?.length || 0} candidate materials`,
+      details: `Analyzed ${images.length} image(s); detected ${result.detectedMaterials?.length || 0} candidate materials (hash: ${payloadSignatures[0]?.hash})`,
       projectContext: projectContext?.name || 'New Project Wizard'
     });
 

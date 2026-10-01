@@ -19,25 +19,25 @@ import {
 } from 'lucide-react';
 import { useProject } from '../context/ProjectContext';
 
-// Built-in realistic sample site photos for 1-click evaluation
+// Built-in realistic sample site photos for 1-click evaluation with valid base64 image data
 const SAMPLE_DEMO_IMAGES = [
   {
     name: 'commercial_bay_glazing.jpg',
-    mimeType: 'image/jpeg',
+    mimeType: 'image/png',
     preview: 'https://images.unsplash.com/photo-1541888946425-d0fbb18615f3?w=600&auto=format&fit=crop&q=80',
-    data: 'sample_glazing_base64_marker'
+    data: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
   },
   {
     name: 'interior_hallway_timber_doors.jpg',
-    mimeType: 'image/jpeg',
+    mimeType: 'image/png',
     preview: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=600&auto=format&fit=crop&q=80',
-    data: 'sample_timber_base64_marker'
+    data: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=='
   },
   {
     name: 'structural_steel_framing.jpg',
-    mimeType: 'image/jpeg',
+    mimeType: 'image/png',
     preview: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&auto=format&fit=crop&q=80',
-    data: 'sample_steel_base64_marker'
+    data: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN88eLFfwAJtANv5E4BtwAAAABJRU5ErkJggg=='
   }
 ];
 
@@ -82,6 +82,10 @@ export default function CreateProjectWizard() {
       return;
     }
 
+    // Clear any previous AI results when new photos are uploaded
+    setDetectedMaterials([]);
+    setUnclearNotice(null);
+
     validFiles.forEach(file => {
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -103,9 +107,15 @@ export default function CreateProjectWizard() {
 
   const removeImage = (index) => {
     setUploadedImages(prev => prev.filter((_, idx) => idx !== index));
+    // Clear stale detections when image set is modified
+    setDetectedMaterials([]);
+    setUnclearNotice(null);
   };
 
   const loadSamplePhotos = () => {
+    // Clear stale detections when sample images are loaded
+    setDetectedMaterials([]);
+    setUnclearNotice(null);
     setUploadedImages(SAMPLE_DEMO_IMAGES);
     showNotification('Loaded 3 sample demolition photos', 'info');
   };
@@ -123,6 +133,9 @@ export default function CreateProjectWizard() {
     }
 
     try {
+      // Clear old state explicitly before new AI assessment
+      setDetectedMaterials([]);
+      setUnclearNotice(null);
       setIsAnalyzing(true);
       setCurrentStep(2);
       setAnalysisStep(1);
@@ -386,6 +399,7 @@ export default function CreateProjectWizard() {
                   multiple
                   accept="image/jpeg,image/png,image/webp"
                   className="hidden"
+                  onClick={(e) => { e.target.value = null; }}
                   onChange={(e) => handleFileSelection(e.target.files)}
                 />
               </label>
