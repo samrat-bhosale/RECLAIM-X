@@ -172,7 +172,131 @@ export const translations = {
       save: 'Save',
       open: 'Open',
       close: 'Close',
-      tonnes: 'Tonnes'
+      tonnes: 'Tonnes',
+      viewAll: 'View all'
+    },
+    hero: {
+      kicker: 'BUILDING A STRONGER TOMORROW',
+      titleLine1: 'Modern construction',
+      titleLine2: 'for a better future.',
+      subtitle: 'We design and build sustainable, high-quality circular recovery workflows that stand the test of time. From residential to commercial, we bring circular demolition visions to life with precision and integrity.',
+      exploreCta: 'Explore Our Projects',
+      watchVideoCta: 'Launch Demo Audit',
+      scroll: 'Scroll',
+      slideCount: '01 / 04'
+    },
+    services: {
+      kicker: 'OUR SERVICES',
+      heading: 'End-to-end circular deconstruction solutions.',
+      description: 'From planning to salvage delivery, we offer a full spectrum of circular recovery services tailored to your projects. Our AI team ensures every structural and architectural detail is handled with expertise and care.',
+      viewAll: 'View all services',
+      items: [
+        {
+          num: '01',
+          title: 'Residential Deconstruction',
+          desc: 'Custom material audits built for modern living, with a focus on interior salvage quality and architectural detail.'
+        },
+        {
+          num: '02',
+          title: 'Commercial Deconstruction',
+          desc: 'Efficient, functional and future-ready material recovery strategies for enterprise office complexes and retail spaces.'
+        },
+        {
+          num: '03',
+          title: 'Infrastructure Salvage',
+          desc: 'Heavy structural steel, concrete aggregates, and MEP recovery building the backbone for circular communities.'
+        },
+        {
+          num: '04',
+          title: 'Renovation & Remodeling',
+          desc: 'Transforming existing spaces with zero-landfill salvage, circularity ledgers, and recovery gap analytics.'
+        }
+      ]
+    },
+    featuredProjects: {
+      kicker: 'FEATURED PROJECTS',
+      heading: 'Spaces that inspire.',
+      subtitle: 'Explore some of our recent demolition audits and salvage projects where innovation meets environmental craftsmanship.',
+      viewAll: 'View all projects',
+      theRidge: 'The Ridge Residence',
+      theRidgeCat: 'Residential',
+      skyline: 'Skyline Office Tower',
+      skylineCat: 'Commercial',
+      riverside: 'Riverside Bridge Deconstruction',
+      riversideCat: 'Infrastructure'
+    },
+    stats: {
+      completed: '250+',
+      completedLabel: 'Projects Completed',
+      experience: '15+',
+      experienceLabel: 'Years of Experience',
+      satisfaction: '98%',
+      satisfactionLabel: 'Client Satisfaction',
+      team: '50+',
+      teamLabel: 'Team Members'
+    },
+    process: {
+      kicker: 'OUR PROCESS',
+      heading: 'How we build your vision.',
+      steps: [
+        {
+          num: '01',
+          title: 'Plan',
+          desc: 'We understand your goals, demolition site constraints, and material salvage budget.'
+        },
+        {
+          num: '02',
+          title: 'Design & Detect',
+          desc: 'Our AI vision engine analyzes site photos and creates detailed 3D circularity recovery plans.'
+        },
+        {
+          num: '03',
+          title: 'Sequence',
+          desc: 'Skilled deconstruction teams bring the extraction sequence to life with safety and precision.'
+        },
+        {
+          num: '04',
+          title: 'Deliver & Measure',
+          desc: 'We reconcile field actuals, confirm landfill diversion, and guarantee on-time recovery completion.'
+        }
+      ]
+    },
+    aboutUs: {
+      kicker: 'ABOUT US',
+      heading: 'Built on trust, engineered for excellence.',
+      body: 'We are a team of builders, engineers, thinkers and problem-solvers committed to creating circular spaces that make a lasting impact. With a focus on quality, sustainability and client satisfaction, we turn demolition waste into valuable material assets.',
+      learnMore: 'Learn more',
+      values: [
+        { title: 'Integrity', desc: 'We do what’s right for the environment.' },
+        { title: 'Innovation', desc: 'We build smarter circular AI systems.' },
+        { title: 'Quality', desc: 'We never compromise on salvage yields.' },
+        { title: 'Partnership', desc: 'Your circular goals are our highest priority.' }
+      ]
+    },
+    testimonial: {
+      kicker: 'CLIENT TESTIMONIALS',
+      quote: 'Working with RECLAIM X was a seamless experience. Their pre-demolition AI vision audit identified ₹4.2M in recoverable materials with meticulous attention to detail and environmental excellence.',
+      author: 'Daniel Carter',
+      role: 'Director, Horizon Properties & Demolition'
+    },
+    ctaBanner: {
+      kicker: "LET'S BUILD TOGETHER",
+      heading: 'Your vision. Our expertise.',
+      subtitle: 'Tell us about your demolition site or salvage requirements and let’s create something extraordinary together.',
+      cta: 'Get a Quote'
+    },
+    footer: {
+      tagline: 'Modern construction & circular recovery for a sustainable tomorrow.',
+      quickLinks: 'Quick Links',
+      services: 'Services',
+      contact: 'Contact',
+      phone: '+91 98765 43210',
+      email: 'hello@reclaimx.com',
+      address: 'Mumbai, Maharashtra, India',
+      copyright: '© 2026 RECLAIM X. All rights reserved.',
+      privacy: 'Privacy',
+      terms: 'Terms',
+      sitemap: 'Sitemap'
     }
   },
 
@@ -349,7 +473,131 @@ export const translations = {
       save: 'सहेजें',
       open: 'खोलें',
       close: 'बंद करें',
-      tonnes: 'टन'
+      tonnes: 'टन',
+      viewAll: 'सभी देखें'
+    },
+    hero: {
+      kicker: 'एक मजबूत कल का निर्माण',
+      titleLine1: 'बेहतर भविष्य के लिए',
+      titleLine2: 'आधुनिक निर्माण व पुनर्चक्रण।',
+      subtitle: 'हम समय की कसौटी पर खरे उतरने वाले टिकाऊ और उच्च गुणवत्ता वाले सर्कुलर रिकवरी वर्कफ़्लो डिजाइन करते हैं। आवासीय से लेकर वाणिज्यिक तक, हम सटीकता और ईमानदारी के साथ विध्वंस पुनर्चक्रण को जीवंत करते हैं।',
+      exploreCta: 'हमारी परियोजनाएं देखें',
+      watchVideoCta: 'डेमो ऑडिट शुरू करें',
+      scroll: 'स्क्रॉल करें',
+      slideCount: '01 / 04'
+    },
+    services: {
+      kicker: 'हमारी सेवाएं',
+      heading: 'संपूर्ण सर्कुलर विखंडन और पुनर्चक्रण समाधान।',
+      description: 'योजना से लेकर सामग्री वितरण तक, हम आपकी परियोजनाओं के अनुकूल पूर्ण स्पेक्ट्रम सेवाएं प्रदान करते हैं। हमारी एआई टीम हर संरचनात्मक और वास्तु विवरण को विशेषज्ञता के साथ संभालती है।',
+      viewAll: 'सभी सेवाएं देखें',
+      items: [
+        {
+          num: '01',
+          title: 'आवासीय विखंडन',
+          desc: 'आधुनिक जीवन के लिए अनुकूलित सामग्री ऑडिट, आंतरिक निस्तारण गुणवत्ता और वास्तु विवरण पर विशेष ध्यान।'
+        },
+        {
+          num: '02',
+          title: 'वाणिज्यिक विखंडन',
+          desc: 'कॉर्पोरेट कार्यालय परिसरों और खुदरा स्थानों के लिए कुशल, कार्यात्मक और भविष्य-तैयार सामग्री पुनर्प्राप्ति।'
+        },
+        {
+          num: '03',
+          title: 'बुनियादी ढांचा निस्तारण',
+          desc: 'सर्कुलर समुदायों की रीढ़ बनने वाले भारी संरचनात्मक स्टील, कंक्रीट और एमईपी फिक्स्चर की सुरक्षित वसूली।'
+        },
+        {
+          num: '04',
+          title: 'नवीनीकरण व रीमॉडलिंग',
+          desc: 'शून्य-लैंडफिल निस्तारण, सर्कुलैरिटी लेजर और रिकवरी गैप विश्लेषण के साथ मौजूदा स्थानों का कायाकल्प।'
+        }
+      ]
+    },
+    featuredProjects: {
+      kicker: 'प्रमुख परियोजनाएं',
+      heading: 'प्रेरणादायी स्थान।',
+      subtitle: 'हमारे हालिया विध्वंस ऑडिट और निस्तारण परियोजनाओं को देखें जहाँ नवीनता और पर्यावरणीय शिल्प कौशल मिलते हैं।',
+      viewAll: 'सभी परियोजनाएं देखें',
+      theRidge: 'द रिज रेसिडेंस',
+      theRidgeCat: 'आवासीय',
+      skyline: 'स्काईलाइन ऑफिस टॉवर',
+      skylineCat: 'वाणिज्यिक',
+      riverside: 'रिवरसाइड ब्रिज विखंडन',
+      riversideCat: 'बुनियादी ढांचा'
+    },
+    stats: {
+      completed: '250+',
+      completedLabel: 'परियोजनाएं पूर्ण',
+      experience: '15+',
+      experienceLabel: 'वर्षों का अनुभव',
+      satisfaction: '98%',
+      satisfactionLabel: 'ग्राहक संतुष्टि',
+      team: '50+',
+      teamLabel: 'विशेषज्ञ सदस्य'
+    },
+    process: {
+      kicker: 'हमारी प्रक्रिया',
+      heading: 'हम आपके दृष्टिकोण को कैसे साकार करते हैं।',
+      steps: [
+        {
+          num: '01',
+          title: 'योजना',
+          desc: 'हम आपके लक्ष्य, विध्वंस स्थल की सीमाओं और सामग्री निस्तारण बजट को समझते हैं।'
+        },
+        {
+          num: '02',
+          title: 'डिजाइन व पहचान',
+          desc: 'हमारा एआई विजन इंजन तस्वीरों का विश्लेषण कर विस्तृत 3D सर्कुलर योजना तैयार करता है।'
+        },
+        {
+          num: '03',
+          title: 'अनुक्रम',
+          desc: 'कुशल विखंडन दल सुरक्षा और सटीकता के साथ निष्कर्षण अनुक्रम को क्रियान्वित करते हैं।'
+        },
+        {
+          num: '04',
+          title: 'वितरण व मापन',
+          desc: 'हम क्षेत्र के वास्तविक आंकड़ों का मिलान करते हैं और लैंडफिल बचत की पुष्टि करते हैं।'
+        }
+      ]
+    },
+    aboutUs: {
+      kicker: 'हमारे बारे में',
+      heading: 'विश्वास पर निर्मित, उत्कृष्टता के लिए तैयार।',
+      body: 'हम पर्यावरण इंजीनियरों, सॉफ्टवेयर निर्माताओं और विध्वंस विशेषज्ञों की एक समर्पित टीम हैं जो सर्कुलर कार्यप्रवाह बनाने के लिए प्रतिबद्ध हैं। गुणवत्ता, स्थिरता और आर्थिक मूल्य पर ध्यान केंद्रित करते हुए, हम विध्वंस कचरे को मूल्यवान संपत्ति में बदलते हैं।',
+      learnMore: 'और जानें',
+      values: [
+        { title: 'सत्यनिष्ठा', desc: 'हम पर्यावरण के लिए जो सही है वही करते हैं।' },
+        { title: 'नवाचार', desc: 'हम स्मार्ट सर्कुलर एआई सिस्टम बनाते हैं।' },
+        { title: 'गुणवत्ता', desc: 'हम सामग्री पुनर्प्राप्ति पर कभी समझौता नहीं करते।' },
+        { title: 'साझेदारी', desc: 'आपके सर्कुलर लक्ष्य हमारी सर्वोच्च प्राथमिकता हैं।' }
+      ]
+    },
+    testimonial: {
+      kicker: 'ग्राहक समीक्षा',
+      quote: 'रिक्लेम X के साथ काम करना एक सहज अनुभव था। उनके पूर्व-विध्वंस एआई विजन ऑडिट ने ₹4.2M की पुन: प्रयोज्य सामग्री की पहचान की जिसे हम अन्यथा नष्ट कर देते।',
+      author: 'डैनियल कार्टर',
+      role: 'निदेशक, होराइजन प्रॉपर्टीज एंड डिमोलिशन'
+    },
+    ctaBanner: {
+      kicker: 'आइए मिलकर निर्माण करें',
+      heading: 'आपकी दृष्टि। हमारी विशेषज्ञता।',
+      subtitle: 'हमें अपनी विध्वंस साइट या निस्तारण आवश्यकताओं के बारे में बताएं और आइए मिलकर कुछ असाधारण बनाएं।',
+      cta: 'प्रस्ताव प्राप्त करें'
+    },
+    footer: {
+      tagline: 'एक टिकाऊ कल के लिए आधुनिक निर्माण और सर्कुलर पुनर्प्राप्ति।',
+      quickLinks: 'त्वरित लिंक',
+      services: 'सेवाएं',
+      contact: 'संपर्क',
+      phone: '+91 98765 43210',
+      email: 'hello@reclaimx.com',
+      address: 'मुंबई, महाराष्ट्र, भारत',
+      copyright: '© 2026 RECLAIM X. सर्वाधिकार सुरक्षित।',
+      privacy: 'गोपनीयता',
+      terms: 'शर्तें',
+      sitemap: 'साइटमैप'
     }
   },
 
@@ -526,7 +774,131 @@ export const translations = {
       save: 'जतन करा',
       open: 'उघडा',
       close: 'बंद करा',
-      tonnes: 'टन'
+      tonnes: 'टन',
+      viewAll: 'सर्व पहा'
+    },
+    hero: {
+      kicker: 'उद्याच्या मजबूत भविष्याची निर्मिती',
+      titleLine1: 'उज्ज्वल भविष्यासाठी',
+      titleLine2: 'आधुनिक बांधकाम व पुनर्चक्रीकरण.',
+      subtitle: 'आम्ही काळाच्या कसोटीवर टिकणारे शाश्वत आणि उच्च दर्जाचे सर्क्युलर रिकव्हरी वर्कफ्लो तयार करतो. निवासी प्रकल्पांपासून व्यावसायिक संकुलांपर्यंत, आम्ही अचूकता आणि विश्वासार्हतेसह पाडकाम साहित्याचे पुनरुत्थान करतो.',
+      exploreCta: 'आमचे प्रकल्प पहा',
+      watchVideoCta: 'डेमो ऑडिट सुरू करा',
+      scroll: 'स्क्रोल करा',
+      slideCount: '०१ / ०४'
+    },
+    services: {
+      kicker: 'आमच्या सेवा',
+      heading: 'संपूर्ण सर्क्युलर विखंडन व पुनर्चक्रीकरण उपाय.',
+      description: 'नियोजनापासून ते साहित्य पुनर्प्राप्तीपर्यंत, आम्ही तुमच्या पाडकाम प्रकल्पांसाठी सर्वसमावेशक सेवा देतो. आमची एआय टीम प्रत्येक वास्तू आणि रचनात्मक घटकाची काळजीपूर्वक पडताळणी करते.',
+      viewAll: 'सर्व सेवा पहा',
+      items: [
+        {
+          num: '०१',
+          title: 'निवासी विखंडन',
+          desc: 'आधुनिक जीवनशैलीनुसार साहित्याचे ऑडिट, अंतर्गत लाकूड, दारे व काच यांसारख्या मौल्यवान साहित्याची सुरक्षित पुनर्प्राप्ती.'
+        },
+        {
+          num: '०२',
+          title: 'व्यावसायिक विखंडन',
+          desc: 'मोठ्या कॉर्पोरेट कार्यालये आणि व्यावसायिक संकुलांसाठी कार्यक्षम व भविष्यवेधी साहित्य बचाव धोरणे.'
+        },
+        {
+          num: '०३',
+          title: 'पायाभूत सुविधा निस्तारण',
+          desc: 'शाश्वत समाजाचा पाया मजबूत करणारे वजनदार स्ट्रक्चरल स्टील, काँक्रीट आणि एमईपी फिक्स्चरची शास्त्रीय विल्हेवाट.'
+        },
+        {
+          num: '०४',
+          title: 'नूतनीकरण व पुनर्रचना',
+          desc: 'शून्य-कचरा साध्य करण्यासाठी सर्क्युलॅरिटी लेजर, सेव्हिंग कॅल्क्युलेशन आणि रिकव्हरी गॅप विश्लेषणासह जागांचे नूतनीकरण.'
+        }
+      ]
+    },
+    featuredProjects: {
+      kicker: 'प्रमुख प्रकल्प',
+      heading: 'प्रेरणादायी स्थाने.',
+      subtitle: 'आमचे अलीकडील पाडकाम ऑडिट आणि साहित्य बचाव प्रकल्प पहा जिथे आधुनिक तंत्रज्ञान व पर्यावरण रक्षण एकत्र येते.',
+      viewAll: 'सर्व प्रकल्प पहा',
+      theRidge: 'द रिज रेसिडेन्स',
+      theRidgeCat: 'निवासी',
+      skyline: 'स्कायलाइन ऑफिस टॉवर',
+      skylineCat: 'व्यावसायिक',
+      riverside: 'रिव्हरसाइड ब्रिज विखंडन',
+      riversideCat: 'पायाभूत सुविधा'
+    },
+    stats: {
+      completed: '२५०+',
+      completedLabel: 'पूर्ण झालेले प्रकल्प',
+      experience: '१५+',
+      experienceLabel: 'वर्षांचा अनुभव',
+      satisfaction: '९८%',
+      satisfactionLabel: 'ग्राहक समाधान',
+      team: '५०+',
+      teamLabel: 'तज्ज्ञ संघ सदस्य'
+    },
+    process: {
+      kicker: 'आमची कार्यपद्धती',
+      heading: 'आम्ही तुमची दृष्टी कशी प्रत्यक्षात आणतो.',
+      steps: [
+        {
+          num: '०१',
+          title: 'नियोजन',
+          desc: 'आम्ही तुमची उद्दिष्टे, पाडकामाच्या जागेचे स्वरूप आणि साहित्य बचाव बजेट नीट समजून घेतो.'
+        },
+        {
+          num: '०२',
+          title: 'डिझाइन व एआय तपासणी',
+          desc: 'आमचे एआय व्हिजन इंजिन फोटोंचे विश्लेषण करून सविस्तर 3D सर्क्युलॅरिटी योजना तयार करते.'
+        },
+        {
+          num: '०३',
+          title: 'क्रमबद्ध विखंडन',
+          desc: 'कुशल पाडकाम कामगार सुरक्षितता आणि अचूकतेने साहित्याचा योग्य क्रम अमलात आणतात.'
+        },
+        {
+          num: '०४',
+          title: 'वितरण व मोजमाप',
+          desc: 'प्रत्यक्ष नोंदींची पडताळणी करून लँडफिल कचरा बचत आणि वेळेत काम पूर्ण करण्याची हमी देतो.'
+        }
+      ]
+    },
+    aboutUs: {
+      kicker: 'आमच्याविषयी',
+      heading: 'विश्वासावर आधारित, उत्कृष्टतेसाठी समर्पित.',
+      body: 'आम्ही पर्यावरण अभियंते, सॉफ्टवेअर निर्माते आणि पाडकाम तज्ज्ञांचा एक समर्पित गट आहोत जो शाश्वत बांधकामासाठी कटिबद्ध आहे. दर्जा, पर्यावरण संवर्धन आणि आर्थिक बचतीवर भर देऊन आम्ही पाडकामाच्या कचऱ्याचे रूपांतर बहुमूल्य संपत्तीत करतो.',
+      learnMore: 'अधिक जाणून घ्या',
+      values: [
+        { title: 'प्रामाणिकपणा', desc: 'आम्ही पर्यावरणासाठी जे योग्य आहे तेच करतो.' },
+        { title: 'नावीन्य', desc: 'आम्ही स्मार्ट सर्क्युलर एआय अल्गोरिदम विकसित करतो.' },
+        { title: 'गुणवत्ता', desc: 'आम्ही साहित्य पुनर्प्राप्तीच्या दर्जाशी कधीही तडजोड करत नाही.' },
+        { title: 'भागीदारी', desc: 'तुमची शाश्वत उद्दिष्टे हीच आमची सर्वोच्च प्राथमिकता आहे.' }
+      ]
+    },
+    testimonial: {
+      kicker: 'ग्राहकांचे अभिप्राय',
+      quote: 'रिक्लेम X सोबत काम करण्याचा अनुभव अतिशय उत्कृष्ट होता. त्यांच्या पाडकामपूर्व एआय ऑडिटमुळे ₹४२ लाखांचे फेरवापरयोग्य साहित्य वाचले जे अन्यथा कचऱ्यात नष्ट झाले असते.',
+      author: 'डॅनिएल कार्टर',
+      role: 'संचालक, होरायझन प्रॉपर्टीज अँड डिमॉलिशन्स'
+    },
+    ctaBanner: {
+      kicker: 'चला एकत्र काम करूया',
+      heading: 'तुमची दृष्टी. आमचे कौशल्य.',
+      subtitle: 'तुमच्या पाडकाम साइट किंवा साहित्य बचाव गरजेबद्दल आम्हाला सांगा आणि चला मिळून काहीतरी असामान्य घडवूया.',
+      cta: 'कोटेशन मिळवा'
+    },
+    footer: {
+      tagline: 'शाश्वत भविष्यासाठी आधुनिक बांधकाम व सर्क्युलर पुनर्प्राप्ती.',
+      quickLinks: 'महत्त्वाचे दुवे',
+      services: 'सेवा',
+      contact: 'संपर्क',
+      phone: '+९१ ९८७६५ ४३२१०',
+      email: 'hello@reclaimx.com',
+      address: 'मुंबई, महाराष्ट्र, भारत',
+      copyright: '© २०२६ RECLAIM X. सर्व हक्क राखीव.',
+      privacy: 'गोपनीयता धोरण',
+      terms: 'अटी व शर्ती',
+      sitemap: 'साइटमॅप'
     }
   }
 };

@@ -13,6 +13,7 @@ import CircularityTowerView from './components/CircularityTowerView';
 import SimulatorView from './components/SimulatorView';
 import RootCauseView from './components/RootCauseView';
 import AdminPanelView from './components/AdminPanelView';
+import Footer from './components/Footer';
 import { CheckCircle2, AlertCircle, Info, Recycle } from 'lucide-react';
 
 function AppContent() {
@@ -21,11 +22,11 @@ function AppContent() {
   return (
     <div className="min-h-screen flex flex-col bg-[#09090b] text-zinc-100 selection:bg-emerald-500 selection:text-zinc-950">
       
-      {/* Minimal Navigation Header */}
+      {/* Sleek Nexora Navigation Header */}
       <Navbar />
 
       {/* Main Screen Content */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className={`flex-1 w-full ${activeTab === 'dashboard' ? '' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'}`}>
         {activeTab === 'dashboard' && <Dashboard />}
         {activeTab === 'projects' && <ProjectsView />}
         {activeTab === 'create' && <CreateProjectWizard />}
@@ -64,24 +65,8 @@ function AppContent() {
         </div>
       )}
 
-      {/* Minimal Clean Footer */}
-      <footer className="border-t border-zinc-800/80 bg-[#09090b]/80 py-6 px-4 sm:px-6 lg:px-8 text-xs text-zinc-500 mt-auto">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded-md bg-emerald-500/15 text-emerald-400 flex items-center justify-center">
-              <Recycle className="w-3 h-3" />
-            </div>
-            <span className="font-semibold text-zinc-200">RECLAIM X</span>
-            <span className="hidden sm:inline">• Circularity & Material Recovery Platform</span>
-          </div>
-
-          <div className="flex items-center gap-3 text-zinc-500 text-[11px]">
-            <span>Active Role: <strong className="text-emerald-400 uppercase font-mono">{currentUser?.role}</strong></span>
-            <span>•</span>
-            <span>C&D Demolition Intelligence</span>
-          </div>
-        </div>
-      </footer>
+      {/* Comprehensive High-End Nexora Footer */}
+      <Footer />
 
     </div>
   );
