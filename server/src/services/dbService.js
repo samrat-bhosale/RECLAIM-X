@@ -10,13 +10,18 @@ const __dirname = path.dirname(__filename);
 const DATA_DIR = path.join(__dirname, '../../data');
 const DB_FILE = path.join(DATA_DIR, 'store.json');
 
+import WebSocket from 'ws';
+
 // Initialize Supabase client if keys exist
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const isSupabaseEnabled = Boolean(supabaseUrl && supabaseKey && supabaseUrl.startsWith('http'));
 
 export const supabase = isSupabaseEnabled
-  ? createClient(supabaseUrl, supabaseKey)
+  ? createClient(supabaseUrl, supabaseKey, {
+      auth: { persistSession: false },
+      realtime: { transport: WebSocket }
+    })
   : null;
 
 // Built-in JSON Database for zero-config out-of-the-box hackathon reliability
