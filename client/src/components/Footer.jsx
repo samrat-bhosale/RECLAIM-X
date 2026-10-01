@@ -13,32 +13,56 @@ export default function Footer() {
   };
 
   return (
-    <footer className="w-full bg-[#0a0a0c] text-zinc-400 border-t border-white/10 pt-16 pb-12 px-6 sm:px-12 lg:px-24">
+    <footer className="w-full bg-[#111111] text-zinc-400 border-t border-zinc-800 pt-16 pb-12 px-6 sm:px-12 lg:px-24">
       <div className="max-w-7xl mx-auto space-y-12">
         
-        {/* Top Grid */}
+        {/* Top Banner Callout (Matching Reference Bottom Banner) */}
+        <div className="pb-10 border-b border-zinc-800 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="space-y-1">
+            <span className="text-[10px] font-bold tracking-[0.2em] text-zinc-400 uppercase">
+              DATE TIGHT TOGETHER
+            </span>
+            <h3 className="text-2xl sm:text-3xl font-extrabold font-heading text-white tracking-tight">
+              Your vision. Our expertise.
+            </h3>
+            <p className="text-xs text-zinc-400 max-w-xl">
+              The intelligent solution for sustainable project asset recovery and zero-landfill demolition.
+            </p>
+          </div>
+
+          <div>
+            <button
+              onClick={() => { setActiveTab('create'); scrollToTop(); }}
+              className="btn-petrol-primary text-xs font-semibold cursor-pointer"
+            >
+              <span>[ + Create Project ]</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Links Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           
           {/* Col 1 & 2: Brand & Tagline */}
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-black shadow-md">
-                <Recycle className="w-4 h-4 text-black" />
+              <div className="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center text-white shadow-xs">
+                <Recycle className="w-4 h-4 text-zinc-200" />
               </div>
               <span className="text-xl font-bold font-heading text-white tracking-wider">
-                RECLAIM<span className="text-emerald-400">X</span>
+                RECLAIM <span className="text-[#0D3B5E]">X</span>
               </span>
             </div>
 
             <p className="text-xs text-zinc-400 max-w-sm leading-relaxed">
-              {t('footer.tagline')}
+              The intelligent enterprise solution for sustainable project asset recovery, circular deconstruction, and salvage auditing.
             </p>
           </div>
 
           {/* Col 3: Quick Links */}
           <div className="space-y-3">
             <h4 className="text-xs font-bold text-white tracking-wider uppercase">
-              {t('footer.quickLinks')}
+              Quick Links
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
@@ -46,21 +70,7 @@ export default function Footer() {
                   onClick={() => { setActiveTab('dashboard'); scrollToTop(); }}
                   className="hover:text-white transition-colors cursor-pointer"
                 >
-                  Home
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => {
-                    setActiveTab('dashboard');
-                    setTimeout(() => {
-                      const el = document.getElementById('services');
-                      if (el) el.scrollIntoView({ behavior: 'smooth' });
-                    }, 100);
-                  }}
-                  className="hover:text-white transition-colors cursor-pointer"
-                >
-                  Services
+                  Dashboard
                 </button>
               </li>
               <li>
@@ -73,24 +83,26 @@ export default function Footer() {
               </li>
               <li>
                 <button
-                  onClick={() => {
-                    setActiveTab('dashboard');
-                    setTimeout(() => {
-                      const el = document.getElementById('about');
-                      if (el) el.scrollIntoView({ behavior: 'smooth' });
-                    }, 100);
-                  }}
-                  className="hover:text-white transition-colors cursor-pointer"
-                >
-                  About
-                </button>
-              </li>
-              <li>
-                <button
                   onClick={() => { setActiveTab('create'); scrollToTop(); }}
                   className="hover:text-white transition-colors cursor-pointer"
                 >
                   Create Project
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => { setActiveTab('intelligence'); scrollToTop(); }}
+                  className="hover:text-white transition-colors cursor-pointer"
+                >
+                  Analysis
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => { setActiveTab('actuals'); scrollToTop(); }}
+                  className="hover:text-white transition-colors cursor-pointer"
+                >
+                  Recovery
                 </button>
               </li>
             </ul>
@@ -99,20 +111,20 @@ export default function Footer() {
           {/* Col 4: Services */}
           <div className="space-y-3">
             <h4 className="text-xs font-bold text-white tracking-wider uppercase">
-              {t('footer.services')}
+              Services
             </h4>
             <ul className="space-y-2 text-xs">
               <li className="hover:text-white transition-colors cursor-pointer">
-                Residential
+                Site Material Audit
               </li>
               <li className="hover:text-white transition-colors cursor-pointer">
-                Commercial
+                AI Vision Detection
               </li>
               <li className="hover:text-white transition-colors cursor-pointer">
-                Infrastructure
+                Sequence Planning
               </li>
               <li className="hover:text-white transition-colors cursor-pointer">
-                Renovation
+                Salvage Reconciliation
               </li>
             </ul>
           </div>
@@ -120,12 +132,12 @@ export default function Footer() {
           {/* Col 5: Contact & Social */}
           <div className="space-y-3">
             <h4 className="text-xs font-bold text-white tracking-wider uppercase">
-              {t('footer.contact')}
+              Contact
             </h4>
             <div className="space-y-1.5 text-xs text-zinc-400">
-              <p>{t('footer.phone')}</p>
-              <p>{t('footer.email')}</p>
-              <p>{t('footer.address')}</p>
+              <p>+91 98765 43210</p>
+              <p>hello@reclaimx.com</p>
+              <p>Mumbai, Maharashtra, India</p>
             </div>
 
             {/* Social Icons */}
@@ -133,7 +145,7 @@ export default function Footer() {
               {/* LinkedIn */}
               <a
                 href="#linkedin"
-                className="w-7 h-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/10 transition-colors"
+                className="w-7 h-7 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-zinc-700 transition-colors"
                 title="LinkedIn"
               >
                 <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
@@ -144,7 +156,7 @@ export default function Footer() {
               {/* Instagram */}
               <a
                 href="#instagram"
-                className="w-7 h-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/10 transition-colors"
+                className="w-7 h-7 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-zinc-700 transition-colors"
                 title="Instagram"
               >
                 <svg className="w-3.5 h-3.5 fill-none stroke-current stroke-2" viewBox="0 0 24 24">
@@ -157,7 +169,7 @@ export default function Footer() {
               {/* YouTube */}
               <a
                 href="#youtube"
-                className="w-7 h-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/10 transition-colors"
+                className="w-7 h-7 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-zinc-700 transition-colors"
                 title="YouTube"
               >
                 <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
@@ -168,7 +180,7 @@ export default function Footer() {
               {/* X / Twitter */}
               <a
                 href="#twitter"
-                className="w-7 h-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/10 transition-colors"
+                className="w-7 h-7 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-zinc-700 transition-colors"
                 title="X"
               >
                 <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
@@ -181,23 +193,17 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar: Copyright & Legal */}
-        <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-zinc-500">
+        <div className="pt-8 border-t border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-zinc-500">
           <div>
-            {t('footer.copyright')}
+            © 2026 RECLAIM X. All rights reserved.
           </div>
 
           <div className="flex items-center gap-6">
-            <span className="hover:text-zinc-300 transition-colors cursor-pointer">
-              {t('footer.privacy')}
-            </span>
+            <span className="hover:text-zinc-300 transition-colors cursor-pointer">Privacy Policy</span>
             <span>•</span>
-            <span className="hover:text-zinc-300 transition-colors cursor-pointer">
-              {t('footer.terms')}
-            </span>
+            <span className="hover:text-zinc-300 transition-colors cursor-pointer">Terms of Service</span>
             <span>•</span>
-            <span className="hover:text-zinc-300 transition-colors cursor-pointer">
-              {t('footer.sitemap')}
-            </span>
+            <span className="hover:text-zinc-300 transition-colors cursor-pointer">Sitemap</span>
           </div>
 
           <button

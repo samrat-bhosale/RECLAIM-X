@@ -5,8 +5,10 @@ import {
   FolderKanban,
   PlusCircle,
   BrainCircuit,
+  ClipboardList,
+  GitBranch,
   ChevronDown,
-  Building,
+  Search,
   UserCheck,
   Shield,
   Sparkles,
@@ -14,7 +16,7 @@ import {
   Check,
   Menu,
   X,
-  ArrowRight
+  Building
 } from 'lucide-react';
 import { useProject } from '../context/ProjectContext';
 
@@ -36,11 +38,11 @@ export default function Navbar() {
   } = useProject();
 
   const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
-  const [isProjectDropdownOpen, setIsProjectDropdownOpen] = useState(false);
+  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const langRef = useRef(null);
-  const projRef = useRef(null);
+  const userRef = useRef(null);
 
   // Close dropdowns on outside click
   useEffect(() => {
@@ -48,8 +50,8 @@ export default function Navbar() {
       if (langRef.current && !langRef.current.contains(event.target)) {
         setIsLangDropdownOpen(false);
       }
-      if (projRef.current && !projRef.current.contains(event.target)) {
-        setIsProjectDropdownOpen(false);
+      if (userRef.current && !userRef.current.contains(event.target)) {
+        setIsUserDropdownOpen(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
@@ -57,128 +59,97 @@ export default function Navbar() {
   }, []);
 
   const languageOptions = [
-    { code: 'en', label: 'English', native: 'English', flag: 'EN' },
-    { code: 'mr', label: 'Marathi', native: 'मराठी', flag: 'MR' },
-    { code: 'hi', label: 'Hindi', native: 'हिन्दी', flag: 'HI' },
+    { code: 'en', label: 'English (Default)', native: 'English' },
+    { code: 'hi', label: 'हिंदी (Hindi)', native: 'हिंदी' },
+    { code: 'mr', label: 'मराठी (मराठी)', native: 'मराठी' },
   ];
 
-  const currentLangObj = languageOptions.find((l) => l.code === language) || languageOptions[0];
+  const mainNavItems = [
+    { id: 'dashboard', label: 'Dashboard' },
+    { id: 'projects', label: 'Projects' },
+    { id: 'create', label: 'Create Project' },
+    { id: 'intelligence', label: 'Analysis' },
+    { id: 'actuals', label: 'Recovery' },
+    { id: 'simulator', label: 'Simulator' },
+  ];
 
-  const handleNavClick = (tabId, hashId) => {
-    if (activeTab !== 'dashboard') {
-      setActiveTab('dashboard');
-      setTimeout(() => {
-        if (hashId) {
-          const el = document.getElementById(hashId);
-          if (el) el.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 100);
-    } else if (hashId) {
-      const el = document.getElementById(hashId);
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
-    }
-    setIsMobileMenuOpen(false);
-  };
+  if (currentUser?.role === 'admin') {
+    mainNavItems.push({ id: 'admin', label: 'Admin Panel', badge: 'ADMIN' });
+  }
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-[#0d0d0f]/90 backdrop-blur-xl border-b border-white/10 transition-all duration-300">
+    <header className="sticky top-0 z-50 w-full bg-white border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20 gap-4">
+        <div className="flex items-center justify-between h-16 gap-4">
           
-          {/* Brand Logo - Sleek Nexora style */}
-          <div className="flex items-center gap-8 lg:gap-12">
+          {/* Left: Brand Logo */}
+          <div className="flex items-center gap-8">
             <button
               onClick={() => setActiveTab('dashboard')}
-              className="flex items-center gap-3 text-left group transition-transform duration-300 hover:scale-105 cursor-pointer"
+              className="flex items-center gap-2.5 text-left group cursor-pointer"
             >
-              <div className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-black shadow-md group-hover:bg-zinc-200 transition-colors">
-                <Recycle className="w-5 h-5 text-black" />
+              <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-gray-900 group-hover:bg-[#0D3B5E] group-hover:text-white transition-colors">
+                <Recycle className="w-4 h-4" />
               </div>
-              <div className="flex flex-col">
-                <span className="text-xl font-bold font-heading text-white tracking-wider flex items-center gap-1">
-                  RECLAIM<span className="text-emerald-400">X</span>
-                </span>
-                <span className="text-[9px] text-zinc-400 font-medium tracking-widest uppercase">
-                  Circularity AI
-                </span>
-              </div>
+              <span className="text-lg font-bold font-heading text-gray-900 tracking-tight">
+                RECLAIM X
+              </span>
             </button>
 
-            {/* Desktop Navigation Links */}
-            <nav className="hidden md:flex items-center space-x-7 text-xs font-medium tracking-wide text-zinc-300">
-              <button
-                onClick={() => setActiveTab('dashboard')}
-                className={`transition-colors duration-200 hover:text-white cursor-pointer ${
-                  activeTab === 'dashboard' ? 'text-white font-semibold' : 'text-zinc-400'
-                }`}
-              >
-                Home
-              </button>
-
-              <button
-                onClick={() => handleNavClick('dashboard', 'services')}
-                className="transition-colors duration-200 hover:text-white cursor-pointer text-zinc-400"
-              >
-                Services
-              </button>
-
-              <button
-                onClick={() => setActiveTab('projects')}
-                className={`transition-colors duration-200 hover:text-white cursor-pointer ${
-                  activeTab === 'projects' ? 'text-white font-semibold' : 'text-zinc-400'
-                }`}
-              >
-                Projects
-              </button>
-
-              <button
-                onClick={() => handleNavClick('dashboard', 'process')}
-                className="transition-colors duration-200 hover:text-white cursor-pointer text-zinc-400"
-              >
-                Process
-              </button>
-
-              <button
-                onClick={() => handleNavClick('dashboard', 'about')}
-                className="transition-colors duration-200 hover:text-white cursor-pointer text-zinc-400"
-              >
-                About
-              </button>
-
-              {currentUser?.role === 'admin' && (
-                <button
-                  onClick={() => setActiveTab('admin')}
-                  className={`flex items-center gap-1.5 transition-colors duration-200 cursor-pointer ${
-                    activeTab === 'admin' ? 'text-amber-400 font-semibold' : 'text-amber-400/80 hover:text-amber-300'
-                  }`}
-                >
-                  <Shield className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Admin</span>
-                </button>
-              )}
+            {/* Center Navigation Links (Matching Reference Image) */}
+            <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
+              {mainNavItems.map((item) => {
+                const isActive = activeTab === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => setActiveTab(item.id)}
+                    className={`transition-colors cursor-pointer py-1 ${
+                      isActive
+                        ? 'text-gray-900 font-semibold border-b-2 border-[#0D3B5E]'
+                        : 'text-gray-500 hover:text-gray-900'
+                    }`}
+                  >
+                    <span>{item.label}</span>
+                    {item.badge && (
+                      <span className="ml-1.5 px-1.5 py-0.5 text-[9px] font-bold rounded bg-amber-100 text-amber-800 border border-amber-300">
+                        {item.badge}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
             </nav>
           </div>
 
           {/* Right Header Controls */}
           <div className="flex items-center gap-3">
+            
+            {/* Search Icon */}
+            <button
+              onClick={() => setActiveTab('projects')}
+              className="p-2 text-gray-500 hover:text-gray-900 rounded-lg hover:bg-gray-100 transition-colors"
+              title="Search projects"
+            >
+              <Search className="w-4 h-4" />
+            </button>
 
-            {/* Feature 2: Multi-Language Switcher (i18n) */}
+            {/* Language Switcher Dropdown (Matching Reference Popover) */}
             <div className="relative" ref={langRef}>
               <button
                 onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 hover:border-white/25 hover:bg-white/10 text-xs text-zinc-200 transition-all duration-300 cursor-pointer"
-                title="Change Language / भाषा बदला / भाषा बदलें"
+                className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:text-gray-900 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
+                title="Select language"
               >
-                <Globe className="w-3.5 h-3.5 text-zinc-400" />
-                <span className="font-medium text-[11px]">{currentLangObj.native}</span>
-                <ChevronDown className={`w-3 h-3 text-zinc-400 transition-transform duration-200 ${isLangDropdownOpen ? 'rotate-180' : ''}`} />
+                <Globe className="w-4 h-4 text-gray-500" />
+                <span className="hidden sm:inline">
+                  {languageOptions.find((l) => l.code === language)?.native || 'English'}
+                </span>
+                <ChevronDown className={`w-3 h-3 text-gray-500 transition-transform duration-200 ${isLangDropdownOpen ? 'rotate-180' : ''}`} />
               </button>
 
               {isLangDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-44 rounded-2xl bg-[#141417] border border-white/15 shadow-2xl py-1.5 z-50 animate-in fade-in zoom-in-95 duration-200">
-                  <div className="px-3 py-1.5 text-[10px] font-semibold text-zinc-400 uppercase tracking-wider border-b border-white/10">
-                    Language / भाषा
-                  </div>
+                <div className="absolute right-0 mt-2 w-48 rounded-xl bg-white border border-gray-200 shadow-xl py-1.5 z-50 animate-in fade-in duration-150">
                   {languageOptions.map((opt) => (
                     <button
                       key={opt.code}
@@ -186,110 +157,76 @@ export default function Navbar() {
                         setLanguage(opt.code);
                         setIsLangDropdownOpen(false);
                       }}
-                      className={`w-full text-left px-3 py-2 text-xs transition-colors flex items-center justify-between cursor-pointer ${
+                      className={`w-full text-left px-3.5 py-2 text-xs transition-colors flex items-center justify-between cursor-pointer ${
                         language === opt.code
-                          ? 'bg-white/10 text-white font-semibold'
-                          : 'text-zinc-300 hover:bg-white/5'
+                          ? 'bg-gray-50 text-gray-900 font-semibold'
+                          : 'text-gray-600 hover:bg-gray-50'
                       }`}
                     >
-                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-mono text-zinc-500">{opt.flag}</span>
-                        <span>{opt.native}</span>
-                        <span className="text-[10px] text-zinc-500 font-normal">({opt.label})</span>
-                      </div>
-                      {language === opt.code && <Check className="w-3.5 h-3.5 text-emerald-400" />}
+                      <span>{opt.label}</span>
+                      {language === opt.code && <Check className="w-3.5 h-3.5 text-[#0D3B5E]" />}
                     </button>
                   ))}
                 </div>
               )}
             </div>
 
-            {/* Active Project Switcher (Preserves existing data routing) */}
-            {projects.length > 0 && (
-              <div className="relative hidden lg:block" ref={projRef}>
-                <button
-                  onClick={() => setIsProjectDropdownOpen(!isProjectDropdownOpen)}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 hover:border-white/20 text-xs text-zinc-300 transition-all cursor-pointer"
-                  title={t('nav.switchProject')}
-                >
-                  <Building className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                  <span className="max-w-[120px] truncate font-medium">
-                    {activeProjectData?.project?.name || t('nav.activeProject')}
-                  </span>
-                  <ChevronDown className="w-3 h-3 text-zinc-400 shrink-0" />
-                </button>
+            {/* User Profile Avatar with dropdown */}
+            <div className="relative" ref={userRef}>
+              <button
+                onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
+                className="flex items-center gap-2 p-1 rounded-full hover:ring-2 hover:ring-gray-200 transition-all cursor-pointer"
+                title="User profile & settings"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80"
+                  alt="User Avatar"
+                  className="w-7 h-7 rounded-full object-cover border border-gray-300"
+                />
+                <ChevronDown className="w-3 h-3 text-gray-500" />
+              </button>
 
-                {isProjectDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-64 rounded-2xl bg-[#141417] border border-white/15 shadow-2xl py-1.5 z-50 animate-in fade-in duration-200">
-                    <div className="px-3 py-2 text-[10px] font-semibold text-zinc-400 uppercase tracking-wider border-b border-white/10">
-                      {t('nav.switchProject')}
-                    </div>
-                    <div className="max-h-60 overflow-y-auto">
-                      {projects.map((p) => (
-                        <button
-                          key={p.id}
-                          onClick={() => {
-                            selectProject(p.id, true);
-                            setIsProjectDropdownOpen(false);
-                          }}
-                          className={`w-full text-left px-3 py-2.5 text-xs transition flex flex-col cursor-pointer ${
-                            p.id === activeProjectId
-                              ? 'bg-white/10 text-white font-semibold'
-                              : 'text-zinc-300 hover:bg-white/5'
-                          }`}
-                        >
-                          <span className="truncate">{p.name}</span>
-                          <span className="text-[10px] text-zinc-400">{p.location} • {p.buildingType}</span>
-                        </button>
-                      ))}
-                    </div>
+              {isUserDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-56 rounded-xl bg-white border border-gray-200 shadow-xl py-2 z-50 animate-in fade-in duration-150 text-xs">
+                  <div className="px-4 py-2 border-b border-gray-100">
+                    <p className="font-semibold text-gray-900">{currentUser?.name || 'Enterprise Auditor'}</p>
+                    <p className="text-gray-500 text-[11px] capitalize">Role: {currentUser?.role}</p>
                   </div>
-                )}
-              </div>
-            )}
 
-            {/* Demo Data Quick Load Button */}
-            <button
-              onClick={loadDemoProject}
-              disabled={isLoading}
-              title="Quick demo setup for evaluation"
-              className="hidden xl:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-zinc-300 bg-white/5 hover:bg-white/10 border border-white/10 transition-all duration-200 hover:scale-105 cursor-pointer"
-            >
-              <Sparkles className="w-3 h-3 text-emerald-400" />
-              <span>Demo</span>
-            </button>
+                  <div className="py-1">
+                    <button
+                      onClick={() => {
+                        toggleUserRole();
+                        setIsUserDropdownOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-50 flex items-center justify-between cursor-pointer"
+                    >
+                      <span className="flex items-center gap-2">
+                        {currentUser?.role === 'admin' ? <Shield className="w-3.5 h-3.5 text-amber-600" /> : <UserCheck className="w-3.5 h-3.5 text-gray-500" />}
+                        <span>Switch to {currentUser?.role === 'admin' ? 'Auditor' : 'Admin'}</span>
+                      </span>
+                    </button>
 
-            {/* Role Toggle Button (Demonstrates RBAC) */}
-            <button
-              onClick={toggleUserRole}
-              title={`Role: ${currentUser?.role?.toUpperCase()} (click to toggle)`}
-              className={`hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 hover:scale-105 cursor-pointer ${
-                currentUser?.role === 'admin'
-                  ? 'bg-amber-500/15 border-amber-500/30 text-amber-300'
-                  : 'bg-white/5 border-white/10 text-zinc-300 hover:bg-white/10'
-              }`}
-            >
-              {currentUser?.role === 'admin' ? (
-                <Shield className="w-3.5 h-3.5 text-amber-400" />
-              ) : (
-                <UserCheck className="w-3.5 h-3.5 text-zinc-400" />
+                    <button
+                      onClick={() => {
+                        loadDemoProject();
+                        setIsUserDropdownOpen(false);
+                      }}
+                      disabled={isLoading}
+                      className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-50 flex items-center gap-2 cursor-pointer"
+                    >
+                      <Sparkles className="w-3.5 h-3.5 text-[#0D3B5E]" />
+                      <span>Reload Demo Data</span>
+                    </button>
+                  </div>
+                </div>
               )}
-              <span className="capitalize">{currentUser?.role}</span>
-            </button>
-
-            {/* Primary Action Button: "Get a Quote" / "Create Project" */}
-            <button
-              onClick={() => setActiveTab('create')}
-              className="inline-flex items-center gap-2 px-5 py-2 rounded-full text-xs font-semibold tracking-wide border border-white/20 bg-white/10 hover:bg-white hover:text-black text-white transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg cursor-pointer"
-            >
-              <span>{t('ctaBanner.cta')}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            </div>
 
             {/* Mobile Menu Hamburger */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg text-zinc-400 hover:text-white hover:bg-white/5 transition"
+              className="md:hidden p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg"
             >
               {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -299,55 +236,21 @@ export default function Navbar() {
 
         {/* Mobile Navigation Dropdown */}
         {isMobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-white/10 space-y-2 animate-in fade-in duration-200">
-            <button
-              onClick={() => { setActiveTab('dashboard'); setIsMobileMenuOpen(false); }}
-              className="w-full text-left px-3 py-2 text-sm text-zinc-200 hover:bg-white/5 rounded-lg"
-            >
-              Home
-            </button>
-            <button
-              onClick={() => handleNavClick('dashboard', 'services')}
-              className="w-full text-left px-3 py-2 text-sm text-zinc-200 hover:bg-white/5 rounded-lg"
-            >
-              Services
-            </button>
-            <button
-              onClick={() => { setActiveTab('projects'); setIsMobileMenuOpen(false); }}
-              className="w-full text-left px-3 py-2 text-sm text-zinc-200 hover:bg-white/5 rounded-lg"
-            >
-              Projects
-            </button>
-            <button
-              onClick={() => handleNavClick('dashboard', 'process')}
-              className="w-full text-left px-3 py-2 text-sm text-zinc-200 hover:bg-white/5 rounded-lg"
-            >
-              Process
-            </button>
-            <button
-              onClick={() => handleNavClick('dashboard', 'about')}
-              className="w-full text-left px-3 py-2 text-sm text-zinc-200 hover:bg-white/5 rounded-lg"
-            >
-              About
-            </button>
-            {currentUser?.role === 'admin' && (
+          <div className="md:hidden py-3 border-t border-gray-200 space-y-1">
+            {mainNavItems.map((item) => (
               <button
-                onClick={() => { setActiveTab('admin'); setIsMobileMenuOpen(false); }}
-                className="w-full text-left px-3 py-2 text-sm text-amber-300 hover:bg-amber-500/10 rounded-lg flex items-center gap-2"
+                key={item.id}
+                onClick={() => {
+                  setActiveTab(item.id);
+                  setIsMobileMenuOpen(false);
+                }}
+                className={`w-full text-left px-3 py-2 text-sm rounded-lg ${
+                  activeTab === item.id ? 'bg-gray-100 font-semibold text-gray-900' : 'text-gray-600'
+                }`}
               >
-                <Shield className="w-4 h-4" />
-                <span>Admin Panel</span>
+                {item.label}
               </button>
-            )}
-            <div className="pt-2 border-t border-white/10 flex items-center justify-between px-3">
-              <span className="text-xs text-zinc-400">Switch Role:</span>
-              <button
-                onClick={toggleUserRole}
-                className="text-xs font-semibold uppercase text-emerald-400 bg-white/5 px-2.5 py-1 rounded"
-              >
-                {currentUser?.role}
-              </button>
-            </div>
+            ))}
           </div>
         )}
 

@@ -2,16 +2,19 @@
 
 @layer base {
   :root {
-    --color-bg-dark: #09090b;
-    --color-card-dark: #121215;
-    --color-emerald-primary: #10b981;
-    --color-border-subtle: #27272a;
+    --color-bg-base: #F8FAFC;
+    --color-card-base: #FFFFFF;
+    --color-accent-petrol: #0D3B5E;
+    --color-accent-teal: #008080;
+    --color-border-subtle: #E2E8F0;
+    --color-text-main: #1F2937;
+    --color-text-muted: #6B7280;
   }
 
   body {
-    background-color: #09090b;
-    color: #f4f4f5;
-    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: #F8FAFC;
+    color: #1F2937;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     min-height: 100vh;
     overflow-x: hidden;
   }
@@ -23,57 +26,154 @@
   }
 }
 
-/* Custom scrollbar */
+/* Minimal light scrollbar */
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #09090b;
+  background: #F1F5F9;
 }
 ::-webkit-scrollbar-thumb {
-  background: #27272a;
+  background: #CBD5E1;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #3f3f46;
+  background: #94A3B8;
 }
 
-/* High-End Minimal SaaS Utility Classes */
+/* Enterprise SaaS Utility Classes - Petrol Blue Accent */
+.btn-petrol-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  background-color: #0D3B5E;
+  color: #FFFFFF;
+  box-shadow: 0 1px 2px 0 rgba(13, 59, 94, 0.1);
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.btn-petrol-primary:hover {
+  background-color: #082840;
+  box-shadow: 0 4px 12px 0 rgba(13, 59, 94, 0.2);
+}
+
+.btn-outline-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  background-color: #FFFFFF;
+  color: #374151;
+  border: 1px solid #D1D5DB;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #F9FAFB;
+  border-color: #9CA3AF;
+  color: #111827;
+}
+
+.saas-kpi-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.03);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.saas-kpi-card:hover {
+  border-color: #CBD5E1;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.saas-data-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background-color: #FFFFFF;
+}
+
+.saas-data-table th {
+  background-color: #F8FAFC;
+  color: #4B5563;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.875rem 1rem;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.saas-data-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #F1F5F9;
+  color: #1F2937;
+  font-size: 0.875rem;
+  vertical-align: middle;
+}
+
+.saas-data-table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.saas-data-table tbody tr:hover {
+  background-color: #F8FAFC;
+}
+
+/* Backward-compatible classes mapped to Petrol Blue & light system */
 .saas-card {
-  background-color: #111114;
-  border: 1px solid #27272a;
-  border-radius: 1rem;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.03);
+  transition: all 0.2s ease;
 }
 
 .saas-card:hover {
-  border-color: #3f3f46;
+  border-color: #CBD5E1;
 }
 
 .saas-card-interactive {
-  background-color: #111114;
-  border: 1px solid #27272a;
-  border-radius: 1rem;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.03);
+  transition: all 0.2s ease;
   cursor: pointer;
 }
 
 .saas-card-interactive:hover {
-  border-color: #52525b;
+  border-color: #94A3B8;
   transform: translateY(-1px);
+  box-shadow: 0 4px 8px -2px rgba(0, 0, 0, 0.06);
 }
 
 .saas-stat-card {
-  background-color: #111114;
-  border: 1px solid #27272a;
-  border-radius: 1rem;
-  padding: 1.5rem;
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.03);
   transition: border-color 0.2s ease;
 }
 
 .saas-stat-card:hover {
-  border-color: #3f3f46;
+  border-color: #CBD5E1;
 }
 
 .saas-btn-primary {
@@ -81,19 +181,19 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.65rem 1.25rem;
+  padding: 0.625rem 1.25rem;
   font-size: 0.875rem;
   font-weight: 600;
-  border-radius: 0.75rem;
-  background-color: #10b981;
-  color: #09090b;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  transition: all 0.15s ease;
+  border-radius: 0.5rem;
+  background-color: #0D3B5E;
+  color: #FFFFFF;
+  box-shadow: 0 1px 2px 0 rgba(13, 59, 94, 0.1);
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
 }
 
 .saas-btn-primary:hover {
-  background-color: #34d399;
-  transform: translateY(-1px);
+  background-color: #082840;
 }
 
 .saas-btn-secondary {
@@ -101,140 +201,41 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.65rem 1.25rem;
+  padding: 0.625rem 1.25rem;
   font-size: 0.875rem;
   font-weight: 500;
-  border-radius: 0.75rem;
-  background-color: #18181b;
-  color: #f4f4f5;
-  border: 1px solid #27272a;
-  transition: all 0.15s ease;
+  border-radius: 0.5rem;
+  background-color: #FFFFFF;
+  color: #374151;
+  border: 1px solid #D1D5DB;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
 }
 
 .saas-btn-secondary:hover {
-  background-color: #27272a;
-  border-color: #3f3f46;
-  color: #ffffff;
+  background-color: #F9FAFB;
+  border-color: #9CA3AF;
+  color: #111827;
 }
 
 .saas-upload-zone {
-  border: 2px dashed #27272a;
-  border-radius: 1rem;
-  background-color: rgba(18, 18, 21, 0.6);
+  border: 2px dashed #CBD5E1;
+  border-radius: 0.75rem;
+  background-color: #F8FAFC;
   transition: all 0.2s ease;
 }
 
 .saas-upload-zone:hover,
 .saas-upload-zone.dragover {
-  border-color: #10b981;
-  background-color: rgba(16, 185, 129, 0.04);
-}
-
-/* Nexora Architectural Design System Utilities */
-.nexora-hero-bg {
-  background: linear-gradient(180deg, rgba(9, 9, 11, 0.65) 0%, rgba(9, 9, 11, 0.85) 60%, #09090b 100%),
-              url('https://images.unsplash.com/photo-1541888946425-d0fbb18615f3?w=1600&auto=format&fit=crop&q=80');
-  background-size: cover;
-  background-position: center 30%;
-  background-repeat: no-repeat;
-}
-
-.nexora-banner-bg {
-  background: linear-gradient(180deg, rgba(17, 17, 20, 0.82) 0%, rgba(17, 17, 20, 0.95) 100%),
-              url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600&auto=format&fit=crop&q=80');
-  background-size: cover;
-  background-position: center;
-}
-
-.nexora-btn-solid {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
-  padding: 0.75rem 1.6rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-  border-radius: 9999px;
-  background-color: #ffffff;
-  color: #111111;
-  box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.25);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  cursor: pointer;
-}
-
-.nexora-btn-solid:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 24px 0 rgba(255, 255, 255, 0.3);
-  background-color: #f4f4f5;
-}
-
-.nexora-btn-outline {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
-  padding: 0.75rem 1.6rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  border-radius: 9999px;
-  background-color: rgba(255, 255, 255, 0.08);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(8px);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  cursor: pointer;
-}
-
-.nexora-btn-outline:hover {
-  transform: scale(1.05);
-  background-color: #ffffff;
-  color: #111111;
-  border-color: #ffffff;
-  box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.4);
-}
-
-.nexora-service-card {
-  display: flex;
-  flex-direction: column;
-  background-color: #ffffff;
-  border: 1px solid #e4e4e7;
-  border-radius: 1.25rem;
-  overflow: hidden;
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  cursor: pointer;
-}
-
-.nexora-service-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.12);
-  border-color: #d4d4d8;
-}
-
-.nexora-project-card {
-  position: relative;
-  border-radius: 1.25rem;
-  overflow: hidden;
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  cursor: pointer;
-}
-
-.nexora-project-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
-}
-
-.nexora-project-card img {
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.nexora-project-card:hover img {
-  transform: scale(1.05);
+  border-color: #0D3B5E;
+  background-color: rgba(13, 59, 94, 0.03);
 }
 
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
@@ -243,5 +244,5 @@
 }
 
 .animate-fade-in-up {
-  animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }

@@ -14,19 +14,19 @@ import SimulatorView from './components/SimulatorView';
 import RootCauseView from './components/RootCauseView';
 import AdminPanelView from './components/AdminPanelView';
 import Footer from './components/Footer';
-import { CheckCircle2, AlertCircle, Info, Recycle } from 'lucide-react';
+import { CheckCircle2, AlertCircle, Info } from 'lucide-react';
 
 function AppContent() {
   const { activeTab, notification, currentUser } = useProject();
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#09090b] text-zinc-100 selection:bg-emerald-500 selection:text-zinc-950">
+    <div className="min-h-screen flex flex-col bg-[#F8FAFC] text-[#1F2937] selection:bg-[#0D3B5E] selection:text-white">
       
-      {/* Sleek Nexora Navigation Header */}
+      {/* Enterprise SaaS Navigation Header */}
       <Navbar />
 
       {/* Main Screen Content */}
-      <main className={`flex-1 w-full ${activeTab === 'dashboard' ? '' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'}`}>
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeTab === 'dashboard' && <Dashboard />}
         {activeTab === 'projects' && <ProjectsView />}
         {activeTab === 'create' && <CreateProjectWizard />}
@@ -41,31 +41,31 @@ function AppContent() {
         {activeTab === 'admin' && <AdminPanelView />}
       </main>
 
-      {/* Toast Notification Banner */}
+      {/* Toast Notification Banner - Petrol Blue / Monochromatic */}
       {notification && (
         <div className="fixed bottom-6 right-6 z-50 animate-in slide-in-from-bottom duration-300">
           <div
-            className={`flex items-center gap-3 px-4 py-3 rounded-2xl shadow-xl border text-xs font-semibold backdrop-blur-xl ${
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg border text-xs font-semibold backdrop-blur-md ${
               notification.type === 'error'
-                ? 'bg-rose-950/90 text-rose-200 border-rose-500/50'
+                ? 'bg-rose-50 text-rose-800 border-rose-200'
                 : notification.type === 'info'
-                ? 'bg-blue-950/90 text-blue-200 border-blue-500/50'
-                : 'bg-emerald-950/90 text-emerald-200 border-emerald-500/50'
+                ? 'bg-sky-50 text-sky-800 border-sky-200'
+                : 'bg-[#0D3B5E] text-white border-[#082840]'
             }`}
           >
             {notification.type === 'error' ? (
-              <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+              <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
             ) : notification.type === 'info' ? (
-              <Info className="w-4 h-4 text-blue-400 shrink-0" />
+              <Info className="w-4 h-4 text-sky-600 shrink-0" />
             ) : (
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-teal-300 shrink-0" />
             )}
             <span>{notification.message}</span>
           </div>
         </div>
       )}
 
-      {/* Comprehensive High-End Nexora Footer */}
+      {/* Deep Charcoal Enterprise Footer */}
       <Footer />
 
     </div>

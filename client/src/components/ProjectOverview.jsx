@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Building2,
+  Building,
   MapPin,
   Layers,
   ArrowRight,
@@ -37,13 +37,13 @@ export default function ProjectOverview() {
 
   if (!project) {
     return (
-      <div className="saas-card p-12 text-center space-y-4 max-w-lg mx-auto my-12">
-        <Building2 className="w-10 h-10 text-zinc-500 mx-auto" />
-        <h2 className="text-base font-bold text-white">No Project Selected</h2>
-        <p className="text-xs text-zinc-400">Select an existing project or load our pre-configured demo project.</p>
+      <div className="bg-white border border-gray-200 rounded-xl p-12 text-center space-y-4 max-w-lg mx-auto my-12 shadow-xs">
+        <Building className="w-10 h-10 text-gray-400 mx-auto" />
+        <h2 className="text-base font-bold text-gray-900">No Project Selected</h2>
+        <p className="text-xs text-gray-500">Select an existing project or load our pre-configured demo project.</p>
         <button
           onClick={loadDemoProject}
-          className="saas-btn-primary"
+          className="btn-petrol-primary text-xs"
         >
           Load Demo Project
         </button>
@@ -51,7 +51,7 @@ export default function ProjectOverview() {
     );
   }
 
-  // The 6 clean, large navigation cards specified in the prompt
+  // The 6 clean, large navigation cards
   const navigationCards = [
     {
       id: 'intelligence',
@@ -104,38 +104,38 @@ export default function ProjectOverview() {
   ];
 
   return (
-    <div className="space-y-8 max-w-6xl mx-auto py-2 animate-in fade-in duration-300">
+    <div className="space-y-8 max-w-6xl mx-auto py-2 font-sans animate-fade-in-up">
       
       {/* 1. Project Information Header */}
-      <div className="saas-card p-6 sm:p-8 space-y-4">
+      <div className="bg-white border border-gray-200 rounded-xl p-6 sm:p-8 space-y-4 shadow-xs">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-2">
             <div className="flex items-center gap-2.5">
-              <span className="px-2.5 py-0.5 rounded text-[10px] font-semibold tracking-wide bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                {project.status || 'Planning'}
+              <span className="px-2.5 py-0.5 rounded text-[10px] font-semibold tracking-wide bg-[#0D3B5E]/10 text-[#0D3B5E] border border-[#0D3B5E]/20">
+                {project.status || 'Active'}
               </span>
-              <span className="text-xs text-zinc-500 font-mono">
+              <span className="text-xs text-gray-400 font-mono">
                 ID: {project.id}
               </span>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-extrabold font-heading text-white tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-extrabold font-heading text-gray-900 tracking-tight">
               {project.name}
             </h1>
 
-            <div className="flex flex-wrap items-center gap-4 text-xs text-zinc-400 pt-1">
+            <div className="flex flex-wrap items-center gap-4 text-xs text-gray-500 pt-1">
               <span className="flex items-center gap-1.5">
-                <MapPin className="w-3.5 h-3.5 text-zinc-500" />
+                <MapPin className="w-3.5 h-3.5 text-gray-400" />
                 {project.location}
               </span>
               <span>•</span>
               <span className="flex items-center gap-1.5">
-                <Building2 className="w-3.5 h-3.5 text-zinc-500" />
+                <Building className="w-3.5 h-3.5 text-gray-400" />
                 {project.buildingType}
               </span>
               <span>•</span>
               <span className="flex items-center gap-1.5">
-                <Layers className="w-3.5 h-3.5 text-zinc-500" />
+                <Layers className="w-3.5 h-3.5 text-gray-400" />
                 {Number(project.areaSqft || project.area_sqft || 0).toLocaleString()} sq.ft.
               </span>
             </div>
@@ -144,18 +144,18 @@ export default function ProjectOverview() {
           <button
             onClick={runAiAnalysis}
             disabled={isAiAnalyzing}
-            className="saas-btn-secondary cursor-pointer shrink-0"
+            className="btn-outline-secondary text-xs cursor-pointer shrink-0"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${isAiAnalyzing ? 'animate-spin text-emerald-400' : 'text-zinc-400'}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${isAiAnalyzing ? 'animate-spin text-[#0D3B5E]' : 'text-gray-500'}`} />
             <span>{isAiAnalyzing ? 'Re-Auditing...' : 'Re-Run AI Assessment'}</span>
           </button>
         </div>
 
         {/* Site Images Badge if analyzed */}
         {project.siteImages && project.siteImages.length > 0 && (
-          <div className="pt-3 border-t border-zinc-800/80 flex items-center gap-2 text-xs text-zinc-400">
-            <Camera className="w-3.5 h-3.5 text-emerald-400" />
-            <span>{project.siteImages.length} site image(s) analyzed for material identification</span>
+          <div className="pt-3 border-t border-gray-100 flex items-center gap-2 text-xs text-gray-500">
+            <Camera className="w-3.5 h-3.5 text-[#0D3B5E]" />
+            <span>{project.siteImages.length} site photo(s) analyzed for material identification</span>
           </div>
         )}
       </div>
@@ -165,46 +165,46 @@ export default function ProjectOverview() {
         
         {/* Metric 1: Potential Recovery */}
         <div className="saas-stat-card space-y-2">
-          <span className="text-[11px] uppercase font-semibold tracking-wider text-zinc-400 block">
+          <span className="text-[11px] uppercase font-semibold tracking-wider text-gray-500 block">
             Potential Recovery
           </span>
-          <div className="text-2xl sm:text-3xl font-black font-heading text-white tracking-tight">
-            {items.length} <span className="text-xs font-normal text-zinc-400">Streams</span>
+          <div className="text-2xl sm:text-3xl font-black font-heading text-gray-900 tracking-tight">
+            {items.length} <span className="text-xs font-normal text-gray-500">Streams</span>
           </div>
-          <span className="text-xs text-zinc-500">Identified on site</span>
+          <span className="text-xs text-gray-400">Identified on site</span>
         </div>
 
         {/* Metric 2: Estimated Value */}
         <div className="saas-stat-card space-y-2">
-          <span className="text-[11px] uppercase font-semibold tracking-wider text-zinc-400 block">
+          <span className="text-[11px] uppercase font-semibold tracking-wider text-gray-500 block">
             Estimated Value
           </span>
-          <div className="text-2xl sm:text-3xl font-black font-heading text-emerald-400 tracking-tight">
+          <div className="text-2xl sm:text-3xl font-black font-heading text-[#0D3B5E] tracking-tight">
             ₹{(ledger.predictedNetValue || 0).toLocaleString('en-IN')}
           </div>
-          <span className="text-xs text-zinc-500">Net salvage potential</span>
+          <span className="text-xs text-gray-400">Net salvage potential</span>
         </div>
 
         {/* Metric 3: Actual Recovery */}
         <div className="saas-stat-card space-y-2">
-          <span className="text-[11px] uppercase font-semibold tracking-wider text-zinc-400 block">
+          <span className="text-[11px] uppercase font-semibold tracking-wider text-gray-500 block">
             Actual Recovery
           </span>
-          <div className="text-2xl sm:text-3xl font-black font-heading text-teal-300 tracking-tight">
+          <div className="text-2xl sm:text-3xl font-black font-heading text-teal-800 tracking-tight">
             ₹{(ledger.actualNetValue || 0).toLocaleString('en-IN')}
           </div>
-          <span className="text-xs text-zinc-500">Confirmed realized</span>
+          <span className="text-xs text-gray-400">Confirmed realized</span>
         </div>
 
         {/* Metric 4: Recovery Gap */}
         <div className="saas-stat-card space-y-2">
-          <span className="text-[11px] uppercase font-semibold tracking-wider text-amber-300 block">
+          <span className="text-[11px] uppercase font-semibold tracking-wider text-amber-700 block">
             Recovery Gap
           </span>
-          <div className="text-2xl sm:text-3xl font-black font-heading text-amber-400 tracking-tight">
+          <div className="text-2xl sm:text-3xl font-black font-heading text-amber-600 tracking-tight">
             ₹{(ledger.profitGap || 0).toLocaleString('en-IN')}
           </div>
-          <span className="text-xs text-zinc-500">Unrecovered salvage deficit</span>
+          <span className="text-xs text-gray-400">Unrecovered salvage deficit</span>
         </div>
 
       </div>
@@ -212,10 +212,10 @@ export default function ProjectOverview() {
       {/* 3. Clearly Separated Large Navigation Cards */}
       <div className="space-y-4 pt-2">
         <div>
-          <h2 className="text-base font-bold font-heading text-white">
+          <h2 className="text-base font-bold font-heading text-gray-900">
             Project Modules & Analysis
           </h2>
-          <p className="text-xs text-zinc-400">
+          <p className="text-xs text-gray-500">
             Open focused screens to inspect intelligence, plans, financial ledgers, and simulators
           </p>
         </div>
@@ -227,29 +227,29 @@ export default function ProjectOverview() {
               <div
                 key={card.id}
                 onClick={() => setActiveTab(card.id)}
-                className="saas-card-interactive p-6 flex flex-col justify-between space-y-5 group"
+                className="bg-white border border-gray-200 rounded-xl p-6 flex flex-col justify-between space-y-5 group hover:border-gray-300 hover:shadow-md transition-all cursor-pointer"
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <div className="w-9 h-9 rounded-lg bg-zinc-800/80 border border-zinc-700/60 flex items-center justify-center text-emerald-400 group-hover:bg-emerald-500/10 group-hover:border-emerald-500/30 transition-all">
+                    <div className="w-9 h-9 rounded-lg bg-gray-50 border border-gray-200 flex items-center justify-center text-[#0D3B5E] group-hover:bg-[#0D3B5E] group-hover:text-white transition-all">
                       <Icon className="w-4 h-4" />
                     </div>
-                    <span className="text-[11px] font-semibold text-zinc-400 bg-zinc-800/80 px-2.5 py-0.5 rounded-full border border-zinc-700/50">
+                    <span className="text-[11px] font-semibold text-gray-600 bg-gray-50 px-2.5 py-0.5 rounded-full border border-gray-200">
                       {card.badge}
                     </span>
                   </div>
 
                   <div>
-                    <h3 className="text-base font-bold text-white group-hover:text-emerald-400 transition-colors">
+                    <h3 className="text-base font-bold text-gray-900 group-hover:text-[#0D3B5E] transition-colors">
                       {card.title}
                     </h3>
-                    <p className="text-xs text-zinc-400 leading-relaxed pt-1">
+                    <p className="text-xs text-gray-500 leading-relaxed pt-1">
                       {card.desc}
                     </p>
                   </div>
                 </div>
 
-                <div className="pt-3 border-t border-zinc-800/80 flex items-center justify-between text-xs text-zinc-400 group-hover:text-emerald-300 transition-colors">
+                <div className="pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500 group-hover:text-[#0D3B5E] transition-colors">
                   <span className="font-medium">{card.cta}</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </div>

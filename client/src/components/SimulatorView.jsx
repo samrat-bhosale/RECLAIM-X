@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import {
   GitBranch,
-  Sparkles,
+  ArrowRight,
   ArrowUp,
   ArrowDown,
   RotateCcw,
-  ArrowRight,
-  TrendingUp,
-  Coins,
-  Recycle,
+  Sparkles,
   AlertTriangle,
-  Search
+  Layers,
+  Coins,
+  ShieldCheck,
+  TrendingDown
 } from 'lucide-react';
 import { useProject } from '../context/ProjectContext';
 import { api } from '../services/api';
-import { ScenarioEstimateBanner, SafetyDisclaimerNotice } from './AiSafetyBadge';
+import { SafetyDisclaimerNotice, ScenarioEstimateBanner } from './AiSafetyBadge';
 
 export default function SimulatorView() {
   const { activeProjectData, setActiveTab, showNotification, t } = useProject();
@@ -24,9 +24,7 @@ export default function SimulatorView() {
   const ledger = activeProjectData?.ledger;
 
   const [simulatorSequence, setSimulatorSequence] = useState(
-    initialSequences.length > 0
-      ? [...initialSequences].sort((a, b) => (a.step_number || a.stepNumber) - (b.step_number || b.stepNumber))
-      : []
+    [...initialSequences].sort((a, b) => (a.step_number || a.stepNumber) - (b.step_number || b.stepNumber))
   );
   const [simulationResult, setSimulationResult] = useState(null);
   const [isSimulating, setIsSimulating] = useState(false);
@@ -86,84 +84,83 @@ export default function SimulatorView() {
   };
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto py-2 animate-in fade-in duration-300">
+    <div className="space-y-6 max-w-5xl mx-auto py-2 font-sans animate-fade-in-up">
       
       {/* Top Banner */}
-      <div className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="p-6 rounded-xl bg-white border border-gray-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xs">
         <div>
           <button
             onClick={() => setActiveTab('overview')}
-            className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white mb-2 transition"
+            className="inline-flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-900 mb-2 transition"
           >
             <ArrowRight className="w-3.5 h-3.5 rotate-180" />
             {t('common.backToHub')}
           </button>
           <div className="flex items-center gap-2 mb-1">
-            <span className="px-2 py-0.5 rounded text-[10px] font-bold tracking-widest bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 uppercase">
-              What-If Counterfactual
+            <span className="px-2 py-0.5 rounded text-[10px] font-bold tracking-widest bg-[#0D3B5E]/10 text-[#0D3B5E] border border-[#0D3B5E]/20 uppercase">
+              Simulator
             </span>
-            <span className="text-xs text-slate-400">• Sequence Sensitivity Simulator</span>
+            <span className="text-xs text-gray-500">• What-If Deconstruction Modeler</span>
           </div>
-          <h1 className="text-2xl font-bold font-heading text-white">
-            Deconstruction Simulator
+          <h1 className="text-2xl font-bold font-heading text-gray-900">
+            Deconstruction Sequence Simulator
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
-            Modify deconstruction order to test sensitivity to premature heavy demolition and equipment arrival.
+          <p className="text-xs text-gray-500 mt-1">
+            Reorder salvage steps to evaluate how premature structural demolition impacts recovery yield and financial loss.
           </p>
         </div>
 
-        <button
-          onClick={() => setActiveTab('rootcause')}
-          className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition"
-        >
-          <Search className="w-4 h-4 text-rose-400" />
-          <span>View Root Cause Analysis</span>
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setActiveTab('rootcause')}
+            className="btn-outline-secondary text-xs"
+          >
+            <span>Root Cause Analysis</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
       </div>
 
-      {/* Simulator Panel */}
-      <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-800 space-y-6">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+      {/* Simulator Workspace */}
+      <div className="bg-white border border-gray-200 p-6 rounded-xl space-y-6 shadow-xs">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-gray-200 pb-4">
           <div>
-            <div className="flex items-center gap-2">
-              <GitBranch className="w-5 h-5 text-cyan-400" />
-              <h2 className="text-lg font-bold font-heading text-white">
-                Interactive Sequence Simulator
-              </h2>
-            </div>
-            <p className="text-xs text-slate-400 mt-1">
-              Reorder steps using the arrows to model how moving structural tasks earlier increases damage rates.
+            <h2 className="text-base font-bold font-heading text-gray-900">
+              Interactive Sequence Reordering
+            </h2>
+            <p className="text-xs text-gray-500">
+              Drag or use arrows to move heavy mechanical demolition steps ahead of non-structural soft strip
             </p>
           </div>
 
           <div className="flex items-center gap-2.5">
             <button
               onClick={handleResetSequence}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition"
+              className="btn-outline-secondary text-xs py-1.5 px-3"
             >
               <RotateCcw className="w-3.5 h-3.5" />
-              Reset Order
+              <span>Reset</span>
             </button>
             <button
               onClick={handleSimulateSequence}
               disabled={isSimulating}
-              className="inline-flex items-center gap-2 px-5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-400 hover:to-teal-400 text-slate-950 transition shadow-lg shadow-cyan-500/20 disabled:opacity-50"
+              className="btn-petrol-primary text-xs py-1.5 px-4 font-semibold disabled:opacity-50"
             >
-              <Sparkles className="w-4 h-4" />
-              {isSimulating ? 'Simulating...' : 'Simulate Changed Sequence'}
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>{isSimulating ? 'Simulating...' : 'Simulate Changed Sequence'}</span>
             </button>
           </div>
         </div>
 
         {/* Process Flow */}
-        <div className="flex flex-wrap items-center gap-2 text-xs font-bold text-slate-400 pb-2">
-          <span className="px-2.5 py-1 rounded-md bg-slate-800 text-slate-300">Baseline Plan</span>
+        <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-gray-500 pb-2">
+          <span className="px-2.5 py-1 rounded-md bg-gray-100 text-gray-700">Baseline Plan</span>
           <span>→</span>
-          <span className="px-2.5 py-1 rounded-md bg-cyan-950 text-cyan-300 border border-cyan-500/40">Adjust Step Order</span>
+          <span className="px-2.5 py-1 rounded-md bg-[#0D3B5E]/10 text-[#0D3B5E] border border-[#0D3B5E]/20">Adjust Step Order</span>
           <span>→</span>
-          <span className="px-2.5 py-1 rounded-md bg-slate-800 text-slate-300">Evaluate Yield Delta</span>
+          <span className="px-2.5 py-1 rounded-md bg-gray-100 text-gray-700">Evaluate Yield Delta</span>
           <span>→</span>
-          <span className="px-2.5 py-1 rounded-md bg-emerald-950 text-emerald-300 border border-emerald-500/40">Projected Net Value</span>
+          <span className="px-2.5 py-1 rounded-md bg-teal-50 text-teal-800 border border-teal-200">Projected Net Value</span>
         </div>
 
         {/* Reorderable Sequence List */}
@@ -179,24 +176,24 @@ export default function SimulatorView() {
                 key={step.id || index}
                 className={`p-4 rounded-xl border transition flex items-center justify-between gap-4 ${
                   isHeavy
-                    ? 'bg-rose-950/20 border-rose-500/40'
-                    : 'bg-slate-900/70 border-slate-800'
+                    ? 'bg-rose-50/50 border-rose-200'
+                    : 'bg-white border-gray-200'
                 }`}
               >
                 <div className="flex items-center gap-3">
                   <span className={`w-7 h-7 rounded-lg text-xs font-bold flex items-center justify-center ${
-                    isHeavy ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40' : 'bg-slate-800 text-slate-200'
+                    isHeavy ? 'bg-rose-100 text-rose-700 border border-rose-200' : 'bg-gray-100 text-gray-800'
                   }`}>
                     {index + 1}
                   </span>
 
                   <div>
-                    <span className="text-sm font-bold text-white block">
+                    <span className="text-sm font-bold text-gray-900 block">
                       {step.action_title || step.actionTitle}
                     </span>
-                    <span className="text-[11px] text-slate-400">
+                    <span className="text-[11px] text-gray-500">
                       Category: {step.target_category || step.targetCategory}
-                      {isHeavy && <span className="ml-2 text-rose-400 font-bold">• Structural Mechanical Impact</span>}
+                      {isHeavy && <span className="ml-2 text-rose-600 font-bold">• Structural Mechanical Impact</span>}
                     </span>
                   </div>
                 </div>
@@ -205,7 +202,7 @@ export default function SimulatorView() {
                   <button
                     onClick={() => moveStepUp(index)}
                     disabled={index === 0}
-                    className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-30 transition"
+                    className="p-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 disabled:opacity-30 transition cursor-pointer"
                     title="Move earlier in sequence"
                   >
                     <ArrowUp className="w-4 h-4" />
@@ -213,7 +210,7 @@ export default function SimulatorView() {
                   <button
                     onClick={() => moveStepDown(index)}
                     disabled={index === simulatorSequence.length - 1}
-                    className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-30 transition"
+                    className="p-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 disabled:opacity-30 transition cursor-pointer"
                     title="Move later in sequence"
                   >
                     <ArrowDown className="w-4 h-4" />
@@ -226,9 +223,9 @@ export default function SimulatorView() {
 
         {/* Counterfactual Simulation Results Card */}
         {simulationResult && (
-          <div className="p-6 rounded-2xl bg-slate-900/90 border border-cyan-500/40 space-y-5 animate-in fade-in">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
-              <h3 className="text-sm font-bold font-heading uppercase tracking-wider text-cyan-300">
+          <div className="p-6 rounded-xl bg-slate-50 border border-slate-200 space-y-5 animate-in fade-in">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-gray-200 pb-3">
+              <h3 className="text-sm font-bold font-heading uppercase tracking-wider text-[#0D3B5E]">
                 Counterfactual Scenario Projection
               </h3>
               <ScenarioEstimateBanner />
@@ -236,57 +233,63 @@ export default function SimulatorView() {
 
             {/* Results Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              <div className="bg-slate-950/70 p-4 rounded-xl border border-slate-800">
-                <span className="text-[10px] uppercase font-bold text-slate-400 block">Simulated Net Value</span>
-                <span className="text-xl font-bold font-heading text-white mt-1 block">
+              <div className="bg-white p-4 rounded-xl border border-gray-200">
+                <span className="text-[10px] uppercase font-bold text-gray-500 block">Simulated Net Value</span>
+                <span className="text-xl font-bold font-heading text-gray-900 mt-1 block">
                   ₹{simulationResult.simulatedNetValue?.toLocaleString('en-IN')}
                 </span>
-                <span className="text-[10px] text-slate-400">
+                <span className="text-[10px] text-gray-400">
                   Baseline: ₹{(ledger?.predictedNetValue || 0).toLocaleString('en-IN')}
                 </span>
               </div>
 
-              <div className="bg-slate-950/70 p-4 rounded-xl border border-slate-800">
-                <span className="text-[10px] uppercase font-bold text-teal-400 block">Simulated Diversion</span>
-                <span className="text-xl font-bold font-heading text-teal-300 mt-1 block">
+              <div className="bg-white p-4 rounded-xl border border-gray-200">
+                <span className="text-[10px] uppercase font-bold text-teal-800 block">Simulated Diversion</span>
+                <span className="text-xl font-bold font-heading text-teal-800 mt-1 block">
                   {simulationResult.simulatedDivertedTonnes} T
                 </span>
-                <span className="text-[10px] text-slate-400">Recovered tonnes</span>
+                <span className="text-[10px] text-gray-400">Recovered tonnes</span>
               </div>
 
-              <div className="bg-slate-950/70 p-4 rounded-xl border border-slate-800">
-                <span className="text-[10px] uppercase font-bold text-rose-400 block">Simulated Damage Rate</span>
-                <span className="text-xl font-bold font-heading text-rose-400 mt-1 block">
+              <div className="bg-white p-4 rounded-xl border border-gray-200">
+                <span className="text-[10px] uppercase font-bold text-rose-700 block">Simulated Damage Rate</span>
+                <span className="text-xl font-bold font-heading text-rose-600 mt-1 block">
                   {simulationResult.simulatedDamageRate}%
                 </span>
-                <span className="text-[10px] text-slate-400">Vibration & shatter loss</span>
+                <span className="text-[10px] text-gray-400">Vibration & shatter loss</span>
               </div>
 
-              <div className="bg-slate-950/70 p-4 rounded-xl border border-slate-800">
-                <span className="text-[10px] uppercase font-bold text-cyan-400 block">Scenario Delta</span>
+              <div className="bg-white p-4 rounded-xl border border-gray-200">
+                <span className="text-[10px] uppercase font-bold text-[#0D3B5E] block">Scenario Delta</span>
                 <span className={`text-xl font-bold font-heading mt-1 block ${
-                  (simulationResult.simulatedNetValue - (ledger?.actualNetValue || 0)) >= 0 ? 'text-emerald-400' : 'text-rose-400'
+                  (simulationResult.simulatedNetValue - (ledger?.actualNetValue || 0)) >= 0 ? 'text-[#0D3B5E]' : 'text-rose-600'
                 }`}>
                   {(simulationResult.simulatedNetValue - (ledger?.actualNetValue || 0)) >= 0 ? '+' : ''}
                   ₹{(simulationResult.simulatedNetValue - (ledger?.actualNetValue || 0)).toLocaleString('en-IN')}
                 </span>
-                <span className="text-[10px] text-slate-400">vs actual realized</span>
+                <span className="text-[10px] text-gray-400">vs actual realized</span>
               </div>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 text-xs text-slate-300 leading-relaxed">
+            <div className="p-3.5 rounded-xl bg-white border border-gray-200 text-xs text-gray-700 leading-relaxed">
               <strong>Scenario Assessment:</strong> {simulationResult.scenarioAssessment}
             </div>
 
-            <div className="text-[11px] text-slate-400 italic">
-              {simulationResult.disclaimer}
-            </div>
+            {/* Explanation Evidence */}
+            {simulationResult.evidencePoints && simulationResult.evidencePoints.length > 0 && (
+              <div className="space-y-1.5 pt-2 border-t border-gray-200">
+                <span className="text-[11px] font-bold text-gray-700 uppercase">Documented Evidence:</span>
+                <ul className="list-disc list-inside text-xs text-gray-600 space-y-1">
+                  {simulationResult.evidencePoints.map((pt, i) => (
+                    <li key={i}>{pt}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         )}
-
       </div>
 
-      {/* Safety Notice */}
       <SafetyDisclaimerNotice />
 
     </div>

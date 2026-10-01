@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Building2,
+  Building,
   MapPin,
   Layers,
   Upload,
@@ -15,12 +15,11 @@ import {
   Cpu,
   Trash2,
   Check,
-  CheckCircle,
-  FileCheck
+  CheckCircle
 } from 'lucide-react';
 import { useProject } from '../context/ProjectContext';
 
-// Built-in realistic sample site photos for 1-click test
+// Built-in realistic sample site photos for 1-click evaluation
 const SAMPLE_DEMO_IMAGES = [
   {
     name: 'commercial_bay_glazing.jpg',
@@ -47,7 +46,7 @@ export default function CreateProjectWizard() {
 
   const [currentStep, setCurrentStep] = useState(1);
 
-  // Step 1: Project Details
+  // Step 1: Simplified Project Details
   const [details, setDetails] = useState({
     name: '',
     location: '',
@@ -55,21 +54,21 @@ export default function CreateProjectWizard() {
     areaSqft: ''
   });
 
-  // Step 2: Uploaded Site Images
+  // Step 1: Uploaded Site Images (Integrated prominently)
   const [uploadedImages, setUploadedImages] = useState([]);
   const [isDragOver, setIsDragOver] = useState(false);
 
-  // Step 3: AI Detection State & Progress
+  // Step 2: AI Detection State & Progress
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisStep, setAnalysisStep] = useState(0);
 
-  // Step 4: Detected & Confirmed Materials
+  // Step 3: Detected & Confirmed Materials
   const [detectedMaterials, setDetectedMaterials] = useState([]);
   const [unclearNotice, setUnclearNotice] = useState(null);
   const [newMaterialName, setNewMaterialName] = useState('');
   const [isAddingCustom, setIsAddingCustom] = useState(false);
 
-  // Step 5: Final Submission
+  // Step 4: Final Submission
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // File Upload Handlers (Supports JPG, JPEG, PNG, WebP)
@@ -111,16 +110,21 @@ export default function CreateProjectWizard() {
     showNotification('Loaded 3 sample demolition photos', 'info');
   };
 
-  // Step 3: AI Image Material Detection
+  // Trigger Gemini AI Image Material Detection
   const handleAnalyzeImages = async () => {
+    if (!details.name.trim() || !details.location.trim()) {
+      showNotification('Please provide project name and location', 'error');
+      return;
+    }
+
     if (uploadedImages.length === 0) {
-      showNotification('Please upload at least one site photo', 'error');
+      showNotification('Please upload at least one site photo or use sample photos', 'error');
       return;
     }
 
     try {
       setIsAnalyzing(true);
-      setCurrentStep(3);
+      setCurrentStep(2);
       setAnalysisStep(1);
 
       await new Promise(r => setTimeout(r, 650));
@@ -131,7 +135,7 @@ export default function CreateProjectWizard() {
         name: details.name,
         location: details.location,
         buildingType: details.buildingType,
-        areaSqft: Number(details.areaSqft) || 10000
+        areaSqft: Number(details.areaSqft) || 12000
       });
 
       setAnalysisStep(3);
@@ -140,24 +144,24 @@ export default function CreateProjectWizard() {
       setDetectedMaterials(response.detectedMaterials || []);
       setUnclearNotice(response.unclearImageNotice || null);
       
-      setCurrentStep(4);
+      setCurrentStep(3);
     } catch (err) {
       console.error(err);
       showNotification('Image analysis encountered an issue', 'error');
-      setCurrentStep(2);
+      setCurrentStep(1);
     } finally {
       setIsAnalyzing(false);
     }
   };
 
-  // Step 4: Toggle material confirmation
+  // Toggle material confirmation
   const toggleMaterialIncluded = (id) => {
     setDetectedMaterials(prev => prev.map(m => 
       m.id === id ? { ...m, included: !m.included } : m
     ));
   };
 
-  // Step 4: Add custom material
+  // Add custom unlisted material
   const handleAddCustomMaterial = () => {
     if (!newMaterialName.trim()) return;
     const newEntry = {
@@ -177,12 +181,11 @@ export default function CreateProjectWizard() {
     showNotification(`Added ${newEntry.material}`, 'success');
   };
 
-  // Remove material from detected list
   const removeMaterialItem = (id) => {
     setDetectedMaterials(prev => prev.filter(m => m.id !== id));
   };
 
-  // Step 5: Final Submission
+  // Final Project Creation & Assessment Run
   const handleFinalSubmit = async () => {
     try {
       setIsSubmitting(true);
@@ -192,7 +195,7 @@ export default function CreateProjectWizard() {
         name: details.name,
         location: details.location,
         buildingType: details.buildingType,
-        areaSqft: Number(details.areaSqft),
+        areaSqft: Number(details.areaSqft) || 12000,
         siteNotes: `Verified ${confirmed.length} recoverable material streams from uploaded site photos.`,
         siteImages: uploadedImages.map(img => ({ name: img.name, preview: img.preview })),
         confirmedMaterials: confirmed
@@ -207,36 +210,35 @@ export default function CreateProjectWizard() {
   };
 
   const steps = [
-    { num: 1, title: 'Project Details' },
-    { num: 2, title: 'Upload Site Images' },
-    { num: 3, title: 'AI Detection' },
-    { num: 4, title: 'Confirm Materials' },
-    { num: 5, title: 'Generate Assessment' }
+    { num: 1, title: 'Project & Site Images' },
+    { num: 2, title: 'AI Detection' },
+    { num: 3, title: 'Confirm Materials' },
+    { num: 4, title: 'Generate Assessment' }
   ];
 
   return (
-    <div className="max-w-3xl mx-auto py-2 space-y-8 animate-in fade-in duration-300">
+    <div className="max-w-4xl mx-auto py-4 space-y-6 font-sans animate-fade-in-up">
       
-      {/* Visual Stepper */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between text-xs font-semibold px-1">
+      {/* Clean Monochromatic Stepper */}
+      <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-xs">
+        <div className="flex items-center justify-between text-xs font-semibold px-2">
           {steps.map(step => (
             <div
               key={step.num}
               className={`flex items-center gap-2 ${
                 currentStep === step.num
-                  ? 'text-emerald-400'
+                  ? 'text-[#0D3B5E] font-bold'
                   : currentStep > step.num
-                  ? 'text-zinc-200'
-                  : 'text-zinc-600'
+                  ? 'text-gray-900'
+                  : 'text-gray-400'
               }`}
             >
-              <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
+              <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${
                 currentStep > step.num
-                  ? 'bg-emerald-500 text-zinc-950 font-black'
+                  ? 'bg-[#0D3B5E] text-white'
                   : currentStep === step.num
-                  ? 'border-2 border-emerald-400 text-emerald-400 font-bold bg-emerald-500/10'
-                  : 'border border-zinc-700 text-zinc-500'
+                  ? 'bg-[#0D3B5E] text-white ring-2 ring-[#0D3B5E]/30'
+                  : 'border border-gray-300 text-gray-400 bg-white'
               }`}>
                 {currentStep > step.num ? '✓' : step.num}
               </span>
@@ -244,307 +246,273 @@ export default function CreateProjectWizard() {
             </div>
           ))}
         </div>
-
-        <div className="w-full bg-zinc-800/80 rounded-full h-1 overflow-hidden">
-          <div
-            className="bg-emerald-500 h-full rounded-full transition-all duration-300"
-            style={{ width: `${((currentStep - 1) / 4) * 100}%` }}
-          ></div>
-        </div>
       </div>
 
-      {/* STEP 1: Project Details */}
+      {/* ========================================================
+          STEP 1: SIMPLIFIED FORM + PROMINENT SITE IMAGE UPLOAD
+          ======================================================== */}
       {currentStep === 1 && (
-        <div className="saas-card p-6 sm:p-8 space-y-6">
-          <div className="border-b border-zinc-800/80 pb-4">
-            <span className="text-[11px] font-bold text-emerald-400 uppercase tracking-wider block">Step 1 of 5</span>
-            <h2 className="text-xl sm:text-2xl font-bold font-heading text-white mt-1">
-              Project Details
+        <div className="bg-white border border-gray-200 rounded-xl p-6 sm:p-8 space-y-8 shadow-xs">
+          
+          {/* Header */}
+          <div className="border-b border-gray-200 pb-4">
+            <h2 className="text-xl sm:text-2xl font-bold font-heading text-gray-900">
+              Create Demolition Project
             </h2>
-            <p className="text-xs text-zinc-400 mt-1">
-              Specify site name, location, and structural parameters to calibrate material recoverability.
+            <p className="text-xs text-gray-500 mt-1">
+              Enter basic site parameters and upload site photos for automated AI vision salvage detection.
             </p>
           </div>
 
-          <div className="space-y-5 text-xs">
+          {/* Reduced Form Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 text-xs">
             <div>
-              <label className="block font-semibold uppercase tracking-wider text-zinc-300 mb-1.5">
-                Project Name <span className="text-emerald-400">*</span>
+              <label className="block font-semibold uppercase tracking-wider text-gray-700 mb-1.5">
+                Project Name <span className="text-[#0D3B5E]">*</span>
               </label>
               <input
                 type="text"
                 required
-                placeholder="e.g. Sterling Commercial Plaza Demolition"
+                placeholder="e.g. Sterling Plaza Commercial Demolition"
                 value={details.name}
                 onChange={(e) => setDetails({ ...details, name: e.target.value })}
-                className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-3 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-emerald-500 transition"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3.5 py-2.5 text-xs text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#0D3B5E] focus:ring-1 focus:ring-[#0D3B5E] transition"
               />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block font-semibold uppercase tracking-wider text-zinc-300 mb-1.5">
-                  Location / City <span className="text-emerald-400">*</span>
-                </label>
-                <div className="relative">
-                  <MapPin className="w-4 h-4 text-zinc-500 absolute left-3.5 top-3" />
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. Pune, Maharashtra"
-                    value={details.location}
-                    onChange={(e) => setDetails({ ...details, location: e.target.value })}
-                    className="w-full bg-zinc-900 border border-zinc-800 rounded-xl pl-10 pr-4 py-3 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-emerald-500 transition"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block font-semibold uppercase tracking-wider text-zinc-300 mb-1.5">
-                  Building Typology <span className="text-emerald-400">*</span>
-                </label>
-                <select
-                  value={details.buildingType}
-                  onChange={(e) => setDetails({ ...details, buildingType: e.target.value })}
-                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-emerald-500 transition cursor-pointer"
-                >
-                  <option value="Commercial">Commercial (Office / Retail)</option>
-                  <option value="Residential">Residential (Apartments / Housing)</option>
-                  <option value="Industrial">Industrial (Warehouses / Plants)</option>
-                  <option value="Institutional">Institutional (Schools / Labs)</option>
-                  <option value="Mixed-Use">Mixed-Use Facility</option>
-                </select>
+            <div>
+              <label className="block font-semibold uppercase tracking-wider text-gray-700 mb-1.5">
+                Location / City <span className="text-[#0D3B5E]">*</span>
+              </label>
+              <div className="relative">
+                <MapPin className="w-4 h-4 text-gray-400 absolute left-3 top-2.5" />
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Mumbai, Maharashtra"
+                  value={details.location}
+                  onChange={(e) => setDetails({ ...details, location: e.target.value })}
+                  className="w-full bg-white border border-gray-300 rounded-lg pl-9 pr-3.5 py-2.5 text-xs text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#0D3B5E] focus:ring-1 focus:ring-[#0D3B5E] transition"
+                />
               </div>
             </div>
 
             <div>
-              <label className="block font-semibold uppercase tracking-wider text-zinc-300 mb-1.5">
-                Approximate Area (Sq.Ft.) <span className="text-emerald-400">*</span>
+              <label className="block font-semibold uppercase tracking-wider text-gray-700 mb-1.5">
+                Building Typology
+              </label>
+              <select
+                value={details.buildingType}
+                onChange={(e) => setDetails({ ...details, buildingType: e.target.value })}
+                className="w-full bg-white border border-gray-300 rounded-lg px-3.5 py-2.5 text-xs text-gray-900 focus:outline-none focus:border-[#0D3B5E] focus:ring-1 focus:ring-[#0D3B5E] transition cursor-pointer"
+              >
+                <option value="Commercial">Commercial (Office / Retail)</option>
+                <option value="Residential">Residential (Apartments / Housing)</option>
+                <option value="Industrial">Industrial (Warehouses / Plants)</option>
+                <option value="Institutional">Institutional (Schools / Hospitals)</option>
+                <option value="Mixed-Use">Mixed-Use Complex</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block font-semibold uppercase tracking-wider text-gray-700 mb-1.5">
+                Approximate Area (Sq.Ft.)
               </label>
               <div className="relative">
-                <Layers className="w-4 h-4 text-zinc-500 absolute left-3.5 top-3" />
+                <Layers className="w-4 h-4 text-gray-400 absolute left-3 top-2.5" />
                 <input
                   type="number"
                   min="100"
                   step="500"
-                  required
-                  placeholder="e.g. 12000"
+                  placeholder="e.g. 15000"
                   value={details.areaSqft}
                   onChange={(e) => setDetails({ ...details, areaSqft: e.target.value })}
-                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl pl-10 pr-4 py-3 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-emerald-500 transition"
+                  className="w-full bg-white border border-gray-300 rounded-lg pl-9 pr-3.5 py-2.5 text-xs text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#0D3B5E] focus:ring-1 focus:ring-[#0D3B5E] transition"
                 />
               </div>
             </div>
           </div>
 
-          <div className="pt-4 border-t border-zinc-800/80 flex justify-end">
-            <button
-              onClick={() => {
-                if (!details.name.trim() || !details.location.trim() || !details.areaSqft) {
-                  showNotification('Please fill in all project fields', 'error');
-                  return;
-                }
-                setCurrentStep(2);
+          {/* Prominent Site Image Upload Area (Requirement 6) */}
+          <div className="space-y-4 pt-2">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-sm font-bold text-gray-900">
+                  Upload Site Images
+                </h3>
+                <p className="text-xs text-gray-500">
+                  Provide demolition site photos, room interiors, structural frames, or facade glazing.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={loadSamplePhotos}
+                className="text-xs font-semibold text-[#0D3B5E] hover:underline flex items-center gap-1.5 cursor-pointer"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Use Sample Photos (3)</span>
+              </button>
+            </div>
+
+            {/* Drop Zone */}
+            <div
+              onDragOver={(e) => { e.preventDefault(); setIsDragOver(true); }}
+              onDragLeave={() => setIsDragOver(false)}
+              onDrop={(e) => {
+                e.preventDefault();
+                setIsDragOver(false);
+                handleFileSelection(e.dataTransfer.files);
               }}
-              className="saas-btn-primary cursor-pointer"
+              className={`saas-upload-zone p-8 text-center transition flex flex-col items-center justify-center space-y-3 cursor-pointer ${
+                isDragOver ? 'dragover' : ''
+              }`}
             >
-              <span>Next: Upload Site Images</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* STEP 2: Upload Site Images (Visually Prominent!) */}
-      {currentStep === 2 && (
-        <div className="saas-card p-6 sm:p-8 space-y-6">
-          <div className="border-b border-zinc-800/80 pb-4">
-            <span className="text-[11px] font-bold text-emerald-400 uppercase tracking-wider block">Step 2 of 5</span>
-            <h2 className="text-xl sm:text-2xl font-bold font-heading text-white mt-1">
-              Upload Site Images
-            </h2>
-            <p className="text-xs text-zinc-400 mt-1">
-              Upload photos of the site, rooms, facade, or deconstruction areas for Gemini AI material identification.
-            </p>
-          </div>
-
-          {/* Large Prominent Drag & Drop Zone */}
-          <div
-            onDragOver={(e) => { e.preventDefault(); setIsDragOver(true); }}
-            onDragLeave={() => setIsDragOver(false)}
-            onDrop={(e) => {
-              e.preventDefault();
-              setIsDragOver(false);
-              handleFileSelection(e.dataTransfer.files);
-            }}
-            className={`saas-upload-zone p-10 sm:p-12 text-center transition flex flex-col items-center justify-center space-y-4 cursor-pointer ${
-              isDragOver ? 'dragover' : ''
-            }`}
-          >
-            <div className="w-14 h-14 rounded-2xl bg-zinc-800/80 border border-zinc-700/80 flex items-center justify-center text-emerald-400 shadow-sm">
-              <Upload className="w-7 h-7" />
-            </div>
-
-            <div className="space-y-1">
-              <h3 className="text-base font-bold text-white">
-                Upload Site Images
-              </h3>
-              <p className="text-xs text-zinc-400">
-                Drag & drop images here
-              </p>
-              <p className="text-xs text-zinc-500 font-medium">or</p>
-            </div>
-
-            <label className="cursor-pointer saas-btn-secondary py-2 px-5">
-              <span>Choose Images</span>
-              <input
-                type="file"
-                multiple
-                accept="image/jpeg,image/png,image/webp"
-                className="hidden"
-                onChange={(e) => handleFileSelection(e.target.files)}
-              />
-            </label>
-
-            <span className="text-[11px] font-semibold text-zinc-500 tracking-wider">
-              JPG • PNG • WEBP
-            </span>
-          </div>
-
-          {/* Quick Demo Option */}
-          <div className="flex items-center justify-between text-xs bg-zinc-900/60 p-4 rounded-xl border border-zinc-800">
-            <span className="text-zinc-400">
-              Need sample photos for evaluation?
-            </span>
-            <button
-              type="button"
-              onClick={loadSamplePhotos}
-              className="text-emerald-400 hover:text-emerald-300 font-semibold flex items-center gap-1.5 transition cursor-pointer"
-            >
-              <Sparkles className="w-3.5 h-3.5" />
-              Use Sample Demolition Photos (3)
-            </button>
-          </div>
-
-          {/* Uploaded Photos Thumbnails Preview */}
-          {uploadedImages.length > 0 && (
-            <div className="space-y-3">
-              <div className="flex items-center justify-between text-xs text-zinc-300">
-                <span className="font-semibold">Selected Images ({uploadedImages.length})</span>
-                <button
-                  onClick={() => setUploadedImages([])}
-                  className="text-zinc-500 hover:text-rose-400 text-xs transition cursor-pointer"
-                >
-                  Clear all
-                </button>
+              <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center text-gray-600">
+                <Upload className="w-6 h-6" />
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                {uploadedImages.map((img, index) => (
-                  <div
-                    key={index}
-                    className="group relative rounded-xl overflow-hidden border border-zinc-800 aspect-video bg-zinc-950"
+              <div className="space-y-1">
+                <p className="text-sm font-semibold text-gray-900">
+                  Drag & drop site images here
+                </p>
+                <p className="text-xs text-gray-500">or click to browse from your device</p>
+              </div>
+
+              <label className="cursor-pointer btn-outline-secondary text-xs py-1.5 px-4">
+                <span>Choose Photos</span>
+                <input
+                  type="file"
+                  multiple
+                  accept="image/jpeg,image/png,image/webp"
+                  className="hidden"
+                  onChange={(e) => handleFileSelection(e.target.files)}
+                />
+              </label>
+
+              <span className="text-[10px] font-medium text-gray-400">
+                Supports JPG, PNG, WEBP (Up to 10MB per file)
+              </span>
+            </div>
+
+            {/* Uploaded Images Thumbnails */}
+            {uploadedImages.length > 0 && (
+              <div className="space-y-2 pt-2">
+                <div className="flex items-center justify-between text-xs text-gray-600">
+                  <span className="font-semibold">Selected Photos ({uploadedImages.length})</span>
+                  <button
+                    onClick={() => setUploadedImages([])}
+                    className="text-gray-400 hover:text-rose-600 text-xs transition cursor-pointer"
                   >
-                    <img
-                      src={img.preview}
-                      alt={img.name}
-                      className="w-full h-full object-cover"
-                    />
-                    <button
-                      onClick={() => removeImage(index)}
-                      className="absolute top-1.5 right-1.5 p-1 rounded-md bg-black/70 hover:bg-rose-900 text-white transition cursor-pointer"
-                      title="Remove image"
-                    >
-                      <X className="w-3.5 h-3.5" />
-                    </button>
-                    <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-black/70 text-[9px] text-zinc-300 truncate max-w-[85%]">
-                      {img.name}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+                    Clear all
+                  </button>
+                </div>
 
-          {/* Navigation */}
-          <div className="pt-4 border-t border-zinc-800/80 flex items-center justify-between">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                  {uploadedImages.map((img, index) => (
+                    <div
+                      key={index}
+                      className="group relative rounded-lg overflow-hidden border border-gray-200 aspect-video bg-gray-100"
+                    >
+                      <img
+                        src={img.preview}
+                        alt={img.name}
+                        className="w-full h-full object-cover"
+                      />
+                      <button
+                        onClick={() => removeImage(index)}
+                        className="absolute top-1.5 right-1.5 p-1 rounded-md bg-black/60 hover:bg-rose-600 text-white transition cursor-pointer"
+                        title="Remove photo"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Action Footer */}
+          <div className="pt-4 border-t border-gray-200 flex items-center justify-between">
             <button
-              onClick={() => setCurrentStep(1)}
-              className="saas-btn-secondary"
+              onClick={() => setActiveTab('dashboard')}
+              className="btn-outline-secondary text-xs"
             >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Back</span>
+              <span>Cancel</span>
             </button>
 
             <button
               onClick={handleAnalyzeImages}
               disabled={uploadedImages.length === 0}
-              className="saas-btn-primary cursor-pointer disabled:opacity-40"
+              className="btn-petrol-primary text-xs font-semibold cursor-pointer disabled:opacity-40"
             >
-              <Cpu className="w-4 h-4" />
-              <span>Analyze Images with AI</span>
+              <span>[ Analyze Images & Detect Materials → ]</span>
             </button>
           </div>
+
         </div>
       )}
 
-      {/* STEP 3: AI Analyzing Progress Screen */}
-      {currentStep === 3 && (
-        <div className="saas-card p-12 text-center space-y-6">
-          <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mx-auto animate-pulse">
+      {/* ========================================================
+          STEP 2: AI DETECTION PROGRESS SCREEN
+          ======================================================== */}
+      {currentStep === 2 && (
+        <div className="bg-white border border-gray-200 rounded-xl p-12 text-center space-y-6 shadow-xs">
+          <div className="w-16 h-16 rounded-2xl bg-[#0D3B5E]/10 border border-[#0D3B5E]/20 flex items-center justify-center text-[#0D3B5E] mx-auto animate-pulse">
             <Cpu className="w-8 h-8" />
           </div>
 
           <div className="space-y-3 max-w-md mx-auto">
-            <h2 className="text-xl font-bold font-heading text-white">
-              AI Vision Analysis
+            <h2 className="text-xl font-bold font-heading text-gray-900">
+              AI Vision Material Scan
             </h2>
 
-            <div className="space-y-2 text-left bg-zinc-900/60 p-4 rounded-xl border border-zinc-800">
-              <div className={`flex items-center gap-2.5 text-xs ${analysisStep >= 1 ? 'text-emerald-400 font-semibold' : 'text-zinc-500'}`}>
-                {analysisStep > 1 ? <CheckCircle className="w-4 h-4" /> : <div className="w-4 h-4 rounded-full border-2 border-current border-t-transparent animate-spin" />}
+            <div className="space-y-2.5 text-left bg-gray-50 p-4 rounded-xl border border-gray-200">
+              <div className={`flex items-center gap-2.5 text-xs ${analysisStep >= 1 ? 'text-[#0D3B5E] font-semibold' : 'text-gray-400'}`}>
+                {analysisStep > 1 ? <CheckCircle className="w-4 h-4 text-[#0D3B5E]" /> : <div className="w-4 h-4 rounded-full border-2 border-current border-t-transparent animate-spin" />}
                 <span>Analyzing site images...</span>
               </div>
-              <div className={`flex items-center gap-2.5 text-xs ${analysisStep >= 2 ? 'text-emerald-400 font-semibold' : 'text-zinc-500'}`}>
-                {analysisStep > 2 ? <CheckCircle className="w-4 h-4" /> : analysisStep === 2 ? <div className="w-4 h-4 rounded-full border-2 border-current border-t-transparent animate-spin" /> : <div className="w-4 h-4 rounded-full border border-zinc-700" />}
-                <span>Identifying visible materials...</span>
+              <div className={`flex items-center gap-2.5 text-xs ${analysisStep >= 2 ? 'text-[#0D3B5E] font-semibold' : 'text-gray-400'}`}>
+                {analysisStep > 2 ? <CheckCircle className="w-4 h-4 text-[#0D3B5E]" /> : analysisStep === 2 ? <div className="w-4 h-4 rounded-full border-2 border-current border-t-transparent animate-spin" /> : <div className="w-4 h-4 rounded-full border border-gray-300" />}
+                <span>Extracting material evidence & confidence...</span>
               </div>
-              <div className={`flex items-center gap-2.5 text-xs ${analysisStep >= 3 ? 'text-emerald-400 font-semibold' : 'text-zinc-500'}`}>
-                {analysisStep === 3 ? <div className="w-4 h-4 rounded-full border-2 border-current border-t-transparent animate-spin" /> : <div className="w-4 h-4 rounded-full border border-zinc-700" />}
-                <span>Assessing recovery opportunities...</span>
+              <div className={`flex items-center gap-2.5 text-xs ${analysisStep >= 3 ? 'text-[#0D3B5E] font-semibold' : 'text-gray-400'}`}>
+                {analysisStep === 3 ? <div className="w-4 h-4 rounded-full border-2 border-current border-t-transparent animate-spin" /> : <div className="w-4 h-4 rounded-full border border-gray-300" />}
+                <span>Structuring circular recovery streams...</span>
               </div>
             </div>
 
-            <p className="text-[11px] text-zinc-500">
-              Examining facade glazing, interior doorways, structural steel assemblies, and electrical conduits.
+            <p className="text-xs text-gray-500">
+              Gemini Vision is inspecting facade glazing, interior timber doors, structural steel, and MEP conduits.
             </p>
           </div>
         </div>
       )}
 
-      {/* STEP 4: Confirm Materials (Human-in-the-Loop) */}
-      {currentStep === 4 && (
-        <div className="saas-card p-6 sm:p-8 space-y-6">
-          <div className="border-b border-zinc-800/80 pb-4">
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-              <h2 className="text-xl sm:text-2xl font-bold font-heading text-white">
-                Materials Detected from Your Images
-              </h2>
-            </div>
-            <p className="text-xs text-zinc-400 mt-1">
-              Verify the materials detected by the AI. Confirm which items should be included in the recovery assessment.
+      {/* ========================================================
+          STEP 3: CONFIRM MATERIALS (HUMAN-IN-THE-LOOP)
+          ======================================================== */}
+      {currentStep === 3 && (
+        <div className="bg-white border border-gray-200 rounded-xl p-6 sm:p-8 space-y-6 shadow-xs">
+          
+          <div className="border-b border-gray-200 pb-4">
+            <h2 className="text-xl sm:text-2xl font-bold font-heading text-gray-900">
+              Materials Detected from Site Photos
+            </h2>
+            <p className="text-xs text-gray-500 mt-1">
+              Verify the materials detected by the AI. You can include, exclude, or add custom materials before executing the audit.
             </p>
           </div>
 
           {unclearNotice && (
-            <div className="p-3.5 rounded-xl bg-amber-950/20 border border-amber-500/30 flex items-start gap-2.5 text-xs text-amber-300">
-              <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+            <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 flex items-start gap-2.5 text-xs text-amber-800">
+              <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
               <span>{unclearNotice}</span>
             </div>
           )}
 
-          {/* Clean Material Confirmation Cards */}
+          {/* Detected Materials List */}
           <div className="space-y-3">
             {detectedMaterials.map((mat) => {
               const isIncluded = mat.included !== false;
@@ -554,32 +522,32 @@ export default function CreateProjectWizard() {
                   key={mat.id}
                   className={`p-4 rounded-xl border transition flex items-start justify-between gap-4 ${
                     isIncluded
-                      ? 'bg-zinc-900/80 border-zinc-800'
-                      : 'bg-zinc-950/40 border-zinc-900 opacity-60'
+                      ? 'bg-white border-gray-200'
+                      : 'bg-gray-50 border-gray-200 opacity-60'
                   }`}
                 >
-                  <div className="space-y-1.5 flex-1">
+                  <div className="space-y-1 flex-1">
                     <div className="flex items-center gap-2.5 flex-wrap">
-                      <span className="font-bold text-white text-sm">
+                      <span className="font-bold text-gray-900 text-sm">
                         {mat.material}
                       </span>
                       
-                      <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-[#0D3B5E]/10 text-[#0D3B5E] border border-[#0D3B5E]/20">
                         {Math.round(mat.confidence * 100)}% confidence
                       </span>
 
-                      <span className="text-[10px] text-zinc-500 font-medium">
+                      <span className="text-[10px] text-gray-500 font-medium">
                         {mat.category}
                       </span>
                     </div>
 
-                    <p className="text-xs text-zinc-400 leading-relaxed">
+                    <p className="text-xs text-gray-600 leading-relaxed">
                       {mat.evidence}
                     </p>
 
                     {mat.suggestedQuantityHint && (
-                      <p className="text-[10px] text-zinc-500 italic">
-                        Hint: {mat.suggestedQuantityHint}
+                      <p className="text-[10px] text-gray-500 italic">
+                        Estimated quantity: {mat.suggestedQuantityHint}
                       </p>
                     )}
                   </div>
@@ -589,17 +557,17 @@ export default function CreateProjectWizard() {
                       onClick={() => toggleMaterialIncluded(mat.id)}
                       className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
                         isIncluded
-                          ? 'bg-emerald-500 text-zinc-950 hover:bg-emerald-400'
-                          : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'
+                          ? 'bg-[#0D3B5E] text-white hover:bg-[#082840]'
+                          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                       }`}
                     >
-                      {isIncluded ? 'Confirm' : 'Include'}
+                      {isIncluded ? 'Included' : 'Excluded'}
                     </button>
 
                     <button
                       onClick={() => removeMaterialItem(mat.id)}
-                      className="px-2.5 py-1.5 rounded-lg text-xs font-medium text-zinc-500 hover:text-rose-400 hover:bg-zinc-800/80 transition cursor-pointer"
-                      title="Remove item"
+                      className="px-2.5 py-1.5 rounded-lg text-xs font-medium text-gray-400 hover:text-rose-600 hover:bg-gray-100 transition cursor-pointer"
+                      title="Remove material"
                     >
                       Remove
                     </button>
@@ -611,23 +579,23 @@ export default function CreateProjectWizard() {
 
           {/* Add Custom Material */}
           {isAddingCustom ? (
-            <div className="flex items-center gap-2 p-3 bg-zinc-900 rounded-xl border border-zinc-800">
+            <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-xl border border-gray-200">
               <input
                 type="text"
-                placeholder="e.g. Copper plumbing pipes & brass fixtures..."
+                placeholder="e.g. Copper plumbing pipes & brass valves..."
                 value={newMaterialName}
                 onChange={(e) => setNewMaterialName(e.target.value)}
-                className="flex-1 bg-transparent text-xs text-white focus:outline-none placeholder-zinc-500"
+                className="flex-1 bg-white border border-gray-300 rounded px-3 py-1.5 text-xs text-gray-900 focus:outline-none focus:border-[#0D3B5E]"
               />
               <button
                 onClick={handleAddCustomMaterial}
-                className="saas-btn-primary py-1 px-3 text-xs"
+                className="btn-petrol-primary text-xs py-1.5 px-3"
               >
                 Add
               </button>
               <button
                 onClick={() => setIsAddingCustom(false)}
-                className="saas-btn-secondary py-1 px-3 text-xs"
+                className="btn-outline-secondary text-xs py-1.5 px-3"
               >
                 Cancel
               </button>
@@ -635,74 +603,76 @@ export default function CreateProjectWizard() {
           ) : (
             <button
               onClick={() => setIsAddingCustom(true)}
-              className="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 font-medium cursor-pointer"
+              className="inline-flex items-center gap-1.5 text-xs text-[#0D3B5E] hover:underline font-semibold cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
-              Add Unlisted Material Manually
+              <span>Add Unlisted Material Manually</span>
             </button>
           )}
 
           {/* Navigation */}
-          <div className="pt-4 border-t border-zinc-800/80 flex items-center justify-between">
+          <div className="pt-4 border-t border-gray-200 flex items-center justify-between">
             <button
-              onClick={() => setCurrentStep(2)}
-              className="saas-btn-secondary"
+              onClick={() => setCurrentStep(1)}
+              className="btn-outline-secondary text-xs"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Back to Upload</span>
+              <span>Back to Project Setup</span>
             </button>
 
             <button
-              onClick={() => setCurrentStep(5)}
-              className="saas-btn-primary cursor-pointer"
+              onClick={() => setCurrentStep(4)}
+              className="btn-petrol-primary text-xs font-semibold cursor-pointer"
             >
-              <span>Proceed to Assessment</span>
-              <ArrowRight className="w-4 h-4" />
+              <span>Proceed to Assessment →</span>
             </button>
           </div>
+
         </div>
       )}
 
-      {/* STEP 5: Final Review & Project Creation */}
-      {currentStep === 5 && (
-        <div className="saas-card p-6 sm:p-8 space-y-6">
-          <div className="border-b border-zinc-800/80 pb-4">
-            <span className="text-[11px] font-bold text-emerald-400 uppercase tracking-wider block">Step 5 of 5</span>
-            <h2 className="text-xl sm:text-2xl font-bold font-heading text-white mt-1">
+      {/* ========================================================
+          STEP 4: FINAL REVIEW & GENERATE RECOVERY ASSESSMENT
+          ======================================================== */}
+      {currentStep === 4 && (
+        <div className="bg-white border border-gray-200 rounded-xl p-6 sm:p-8 space-y-6 shadow-xs">
+          
+          <div className="border-b border-gray-200 pb-4">
+            <h2 className="text-xl sm:text-2xl font-bold font-heading text-gray-900">
               Generate Recovery Assessment
             </h2>
-            <p className="text-xs text-zinc-400 mt-1">
-              Review project specifications and confirmed material streams before executing the AI circularity audit.
+            <p className="text-xs text-gray-500 mt-1">
+              Confirm your project configuration before running the AI circularity recovery audit.
             </p>
           </div>
 
-          <div className="p-5 rounded-xl bg-zinc-900/60 border border-zinc-800 space-y-4 text-xs">
-            <div className="grid grid-cols-2 gap-3 text-zinc-300">
+          <div className="p-5 rounded-xl bg-gray-50 border border-gray-200 space-y-4 text-xs">
+            <div className="grid grid-cols-2 gap-3 text-gray-700">
               <div>
-                <span className="text-zinc-500 block text-[10px] uppercase font-semibold">Project Name</span>
-                <span className="font-bold text-white text-sm">{details.name}</span>
+                <span className="text-gray-400 block text-[10px] uppercase font-semibold">Project Name</span>
+                <span className="font-bold text-gray-900 text-sm">{details.name}</span>
               </div>
               <div>
-                <span className="text-zinc-500 block text-[10px] uppercase font-semibold">Location</span>
-                <span className="font-bold text-white text-sm">{details.location}</span>
+                <span className="text-gray-400 block text-[10px] uppercase font-semibold">Location</span>
+                <span className="font-bold text-gray-900 text-sm">{details.location}</span>
               </div>
               <div>
-                <span className="text-zinc-500 block text-[10px] uppercase font-semibold">Typology</span>
-                <span className="font-semibold text-white">{details.buildingType}</span>
+                <span className="text-gray-400 block text-[10px] uppercase font-semibold">Typology</span>
+                <span className="font-semibold text-gray-900">{details.buildingType}</span>
               </div>
               <div>
-                <span className="text-zinc-500 block text-[10px] uppercase font-semibold">Gross Area</span>
-                <span className="font-semibold text-white">{Number(details.areaSqft).toLocaleString()} sq.ft.</span>
+                <span className="text-gray-400 block text-[10px] uppercase font-semibold">Gross Area</span>
+                <span className="font-semibold text-gray-900">{Number(details.areaSqft || 12000).toLocaleString()} sq.ft.</span>
               </div>
             </div>
 
-            <div className="pt-3 border-t border-zinc-800/80 space-y-2">
-              <span className="text-zinc-400 block text-[10px] uppercase font-semibold">
+            <div className="pt-3 border-t border-gray-200 space-y-2">
+              <span className="text-gray-500 block text-[10px] uppercase font-semibold">
                 Confirmed Material Streams ({detectedMaterials.filter(m => m.included !== false).length})
               </span>
               <div className="flex flex-wrap gap-2">
                 {detectedMaterials.filter(m => m.included !== false).map(m => (
-                  <span key={m.id} className="px-2.5 py-1 rounded-lg bg-zinc-800 text-[11px] text-emerald-400 font-medium border border-zinc-700">
+                  <span key={m.id} className="px-2.5 py-1 rounded-md bg-white text-[11px] text-[#0D3B5E] font-medium border border-gray-200">
                     {m.material}
                   </span>
                 ))}
@@ -711,10 +681,10 @@ export default function CreateProjectWizard() {
           </div>
 
           {/* Submit Button */}
-          <div className="pt-4 border-t border-zinc-800/80 flex items-center justify-between">
+          <div className="pt-4 border-t border-gray-200 flex items-center justify-between">
             <button
-              onClick={() => setCurrentStep(4)}
-              className="saas-btn-secondary"
+              onClick={() => setCurrentStep(3)}
+              className="btn-outline-secondary text-xs"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Edit Materials</span>
@@ -723,12 +693,13 @@ export default function CreateProjectWizard() {
             <button
               onClick={handleFinalSubmit}
               disabled={isSubmitting}
-              className="saas-btn-primary cursor-pointer disabled:opacity-50"
+              className="btn-petrol-primary text-xs font-semibold cursor-pointer disabled:opacity-50"
             >
               <Check className="w-4 h-4" />
               <span>{isSubmitting ? 'Generating Assessment...' : 'Create Project & Generate Assessment'}</span>
             </button>
           </div>
+
         </div>
       )}
 

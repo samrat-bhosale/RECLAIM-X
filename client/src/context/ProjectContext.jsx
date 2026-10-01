@@ -113,7 +113,7 @@ export function ProjectProvider({ children }) {
           particleCount: 40,
           spread: 60,
           origin: { y: 0.2 },
-          colors: ['#10b981', '#06b6d4', '#3b82f6']
+          colors: ['#0D3B5E', '#008080', '#3b82f6']
         });
       } catch (e) {
         // ignore if canvas not ready
