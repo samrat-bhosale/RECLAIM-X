@@ -16,9 +16,11 @@ import {
   Check,
   Menu,
   X,
-  Building
+  Building,
+  LogIn
 } from 'lucide-react';
 import { useProject } from '../context/ProjectContext';
+import { ReclaimXLogo } from './LoginPage';
 
 export default function Navbar() {
   const {
@@ -88,10 +90,10 @@ export default function Navbar() {
               onClick={() => setActiveTab('dashboard')}
               className="flex items-center gap-2.5 text-left group cursor-pointer"
             >
-              <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-gray-900 group-hover:bg-[#0D3B5E] group-hover:text-white transition-colors">
-                <Recycle className="w-4 h-4" />
+              <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center border border-gray-200 group-hover:border-sky-300 transition-colors">
+                <ReclaimXLogo variant="color" className="w-7 h-7 group-hover:scale-105 transition-transform" />
               </div>
-              <span className="text-lg font-bold font-heading text-gray-900 tracking-tight">
+              <span className="text-lg font-black font-heading text-[#1B2559] tracking-tight">
                 RECLAIM X
               </span>
             </button>
@@ -132,6 +134,20 @@ export default function Navbar() {
               title="Search projects"
             >
               <Search className="w-4 h-4" />
+            </button>
+
+            {/* Direct Login Page Link */}
+            <button
+              onClick={() => setActiveTab('login')}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold transition-colors cursor-pointer ${
+                activeTab === 'login'
+                  ? 'bg-sky-50 text-[#0284C7] border-[#0284C7]'
+                  : 'border-gray-200 text-gray-700 hover:bg-gray-50 hover:text-[#0284C7] hover:border-[#0284C7]/30'
+              }`}
+              title="Sign In / Authentication"
+            >
+              <LogIn className="w-3.5 h-3.5 text-[#0284C7]" />
+              <span className="hidden sm:inline">Sign In</span>
             </button>
 
             {/* Language Switcher Dropdown (Matching Reference Popover) */}
@@ -218,6 +234,17 @@ export default function Navbar() {
                       <Sparkles className="w-3.5 h-3.5 text-[#0D3B5E]" />
                       <span>Reload Demo Data</span>
                     </button>
+
+                    <button
+                      onClick={() => {
+                        setActiveTab('login');
+                        setIsUserDropdownOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-50 flex items-center gap-2 cursor-pointer border-t border-gray-100 mt-1 pt-2"
+                    >
+                      <LogIn className="w-3.5 h-3.5 text-[#0284C7]" />
+                      <span>Sign In / Switch User</span>
+                    </button>
                   </div>
                 </div>
               )}
@@ -251,6 +278,18 @@ export default function Navbar() {
                 {item.label}
               </button>
             ))}
+            <button
+              onClick={() => {
+                setActiveTab('login');
+                setIsMobileMenuOpen(false);
+              }}
+              className={`w-full text-left px-3 py-2 text-sm rounded-lg flex items-center gap-2 ${
+                activeTab === 'login' ? 'bg-sky-50 font-semibold text-[#0284C7]' : 'text-gray-600'
+              }`}
+            >
+              <LogIn className="w-4 h-4 text-[#0284C7]" />
+              <span>Sign In Page</span>
+            </button>
           </div>
         )}
 
