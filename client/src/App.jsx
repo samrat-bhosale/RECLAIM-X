@@ -19,13 +19,13 @@ function AppContent() {
   const { activeTab, notification, currentUser } = useProject();
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#090d16] text-slate-100 selection:bg-emerald-500 selection:text-slate-950">
+    <div className="min-h-screen flex flex-col bg-[#09090b] text-zinc-100 selection:bg-emerald-500 selection:text-zinc-950">
       
       {/* Minimal Navigation Header */}
       <Navbar />
 
       {/* Main Screen Content */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeTab === 'dashboard' && <Dashboard />}
         {activeTab === 'projects' && <ProjectsView />}
         {activeTab === 'create' && <CreateProjectWizard />}
@@ -65,17 +65,17 @@ function AppContent() {
       )}
 
       {/* Minimal Clean Footer */}
-      <footer className="border-t border-slate-900/80 bg-slate-950/60 py-6 px-4 sm:px-6 lg:px-8 text-xs text-slate-500 mt-auto">
+      <footer className="border-t border-zinc-800/80 bg-[#09090b]/80 py-6 px-4 sm:px-6 lg:px-8 text-xs text-zinc-500 mt-auto">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <div className="w-5 h-5 rounded-md bg-emerald-500/15 text-emerald-400 flex items-center justify-center">
               <Recycle className="w-3 h-3" />
             </div>
-            <span className="font-semibold text-slate-300">RECLAIM X</span>
-            <span className="hidden sm:inline">• AI Material Recovery & Circularity Platform</span>
+            <span className="font-semibold text-zinc-200">RECLAIM X</span>
+            <span className="hidden sm:inline">• Circularity & Material Recovery Platform</span>
           </div>
 
-          <div className="flex items-center gap-3 text-slate-400 text-[11px]">
+          <div className="flex items-center gap-3 text-zinc-500 text-[11px]">
             <span>Active Role: <strong className="text-emerald-400 uppercase font-mono">{currentUser?.role}</strong></span>
             <span>•</span>
             <span>C&D Demolition Intelligence</span>
