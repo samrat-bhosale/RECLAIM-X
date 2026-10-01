@@ -127,25 +127,36 @@ Return ONLY valid JSON matching this schema:
       }
     ];
 
-    // Attempt generation with flash model
+    // Attempt generation with active Gemini flash models
     let response;
     try {
       response = await ai.models.generateContent({
-        model: 'gemini-1.5-flash',
+        model: 'gemini-3.5-flash-lite',
         contents: contents,
         config: {
           responseMimeType: 'application/json'
         }
       });
     } catch (modelErr) {
-      console.warn('[RECLAIM X Vision] gemini-1.5-flash attempt returned error, trying gemini-2.0-flash:', modelErr.message);
-      response = await ai.models.generateContent({
-        model: 'gemini-2.0-flash',
-        contents: contents,
-        config: {
-          responseMimeType: 'application/json'
-        }
-      });
+      console.warn('[RECLAIM X Vision] gemini-3.5-flash-lite attempt returned error, trying gemini-3.8-flash:', modelErr.message);
+      try {
+        response = await ai.models.generateContent({
+          model: 'gemini-3.8-flash',
+          contents: contents,
+          config: {
+            responseMimeType: 'application/json'
+          }
+        });
+      } catch (err2) {
+        console.warn('[RECLAIM X Vision] gemini-3.8-flash returned error, trying gemini-3.5-flash:', err2.message);
+        response = await ai.models.generateContent({
+          model: 'gemini-3.5-flash',
+          contents: contents,
+          config: {
+            responseMimeType: 'application/json'
+          }
+        });
+      }
     }
 
     const text = response.text || '';
@@ -537,7 +548,7 @@ Produce JSON matching this exact structure:
 }`;
 
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-3.5-flash',
       contents: [
         { role: 'user', parts: [{ text: `${SYSTEM_PROMPT}\n\n${userPrompt}` }] }
       ],
@@ -625,7 +636,7 @@ Return JSON with:
 }`;
 
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-3.5-flash',
       contents: [{ role: 'user', parts: [{ text: prompt }] }],
       config: { responseMimeType: 'application/json' }
     });
