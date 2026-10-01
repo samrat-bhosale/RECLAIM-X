@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { api } from '../services/api';
+import { translations } from '../i18n/translations';
 import confetti from 'canvas-confetti';
 
 const ProjectContext = createContext(null);
@@ -13,6 +14,31 @@ export function ProjectProvider({ children }) {
   const [isAiAnalyzing, setIsAiAnalyzing] = useState(false);
   const [notification, setNotification] = useState(null);
   const [systemHealth, setSystemHealth] = useState(null);
+
+  // Multilingual Support: 'en' (Default), 'hi', 'mr'
+  const [language, setLanguage] = useState('en');
+
+  const t = useCallback((path) => {
+    const keys = path.split('.');
+    let current = translations[language] || translations['en'];
+    for (const key of keys) {
+      if (current && current[key] !== undefined) {
+        current = current[key];
+      } else {
+        // Fallback to English
+        let fallback = translations['en'];
+        for (const fbKey of keys) {
+          if (fallback && fallback[fbKey] !== undefined) {
+            fallback = fallback[fbKey];
+          } else {
+            return path;
+          }
+        }
+        return fallback || path;
+      }
+    }
+    return current;
+  }, [language]);
 
   // User Profile & Role (Default: normal user; toggleable for Admin Panel testing)
   const [currentUser, setCurrentUser] = useState({
@@ -221,6 +247,9 @@ export function ProjectProvider({ children }) {
         systemHealth,
         currentUser,
         toggleUserRole,
+        language,
+        setLanguage,
+        t,
         loadProjects,
         selectProject,
         loadDemoProject: handleLoadDemoProject,

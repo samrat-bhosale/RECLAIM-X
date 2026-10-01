@@ -10,8 +10,7 @@ import {
   CheckCircle2,
   AlertOctagon,
   GitBranch,
-  Calendar,
-  Sparkles,
+  Search,
   Camera
 } from 'lucide-react';
 import { useProject } from '../context/ProjectContext';
@@ -22,7 +21,8 @@ export default function ProjectOverview() {
     setActiveTab,
     runAiAnalysis,
     isAiAnalyzing,
-    loadDemoProject
+    loadDemoProject,
+    t
   } = useProject();
 
   const project = activeProjectData?.project;
@@ -51,71 +51,79 @@ export default function ProjectOverview() {
     );
   }
 
-  // Navigation Hub Cards (Section 10)
-  const navigationHubCards = [
+  // The 7 Distinct Action Cards specified in Section 7 & 8
+  const actionCards = [
     {
       id: 'intelligence',
-      title: 'AI Recovery Intelligence',
-      desc: 'Detected materials, recoverability estimates, and AI reasoning evidence.',
+      title: t('overview.actions.intelligenceTitle'),
+      desc: t('overview.actions.intelligenceDesc'),
       icon: BrainCircuit,
       color: 'text-cyan-400',
       badge: `${items.length} Streams`
     },
     {
       id: 'plan',
-      title: 'Recovery Plan',
-      desc: 'Recommended chronological deconstruction sequence and impact risk alerts.',
+      title: t('overview.actions.planTitle'),
+      desc: t('overview.actions.planDesc'),
       icon: ClipboardList,
       color: 'text-emerald-400',
       badge: `${sequences.length} Steps`
     },
     {
       id: 'economic',
-      title: 'Economic Impact',
-      desc: 'Gross salvage revenue, landfill tipping fee avoidance, and labor costs breakdown.',
+      title: t('overview.actions.economicTitle'),
+      desc: t('overview.actions.economicDesc'),
       icon: Coins,
       color: 'text-teal-400',
       badge: `₹${(ledger.predictedNetValue || 0).toLocaleString('en-IN')}`
     },
     {
       id: 'actuals',
-      title: 'Actual Recovery',
-      desc: 'Log field reclaimed quantities, broken materials, and on-site notes.',
+      title: t('overview.actions.actualsTitle'),
+      desc: t('overview.actions.actualsDesc'),
       icon: CheckCircle2,
       color: 'text-blue-400',
       badge: 'Field Logger'
     },
     {
       id: 'gap',
-      title: 'Recovery Gap & Root Cause',
-      desc: 'Compare predicted vs actual recovery and diagnose why recovery was lost.',
+      title: t('overview.actions.gapTitle'),
+      desc: t('overview.actions.gapDesc'),
       icon: AlertOctagon,
       color: 'text-amber-400',
       badge: `₹${(ledger.profitGap || 0).toLocaleString('en-IN')} Gap`
     },
     {
       id: 'simulator',
-      title: 'Counterfactual Simulator',
-      desc: 'Reorder deconstruction steps to test sensitivity to early demolition.',
+      title: t('overview.actions.simulatorTitle'),
+      desc: t('overview.actions.simulatorDesc'),
       icon: GitBranch,
       color: 'text-purple-400',
       badge: 'What-If Model'
+    },
+    {
+      id: 'rootcause',
+      title: t('overview.actions.rootCauseTitle'),
+      desc: t('overview.actions.rootCauseDesc'),
+      icon: Search,
+      color: 'text-rose-400',
+      badge: 'Gemini Root Cause'
     }
   ];
 
   return (
     <div className="space-y-8 max-w-5xl mx-auto py-2 animate-in fade-in duration-300">
       
-      {/* 1. Project Information Header (Section 10) */}
+      {/* 1. Project Information Header */}
       <div className="p-6 sm:p-7 rounded-2xl bg-slate-900/70 border border-slate-800 space-y-4">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <span className="px-2.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/20">
-                {project.status || 'Planning'}
+                {project.status || t('overview.planning')}
               </span>
               <span className="text-[11px] text-slate-400">
-                Project ID: <span className="font-mono text-slate-300">{project.id}</span>
+                ID: <span className="font-mono text-slate-300">{project.id}</span>
               </span>
             </div>
 
@@ -147,11 +155,11 @@ export default function ProjectOverview() {
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition shrink-0"
           >
             <BrainCircuit className="w-3.5 h-3.5 text-cyan-400" />
-            <span>{isAiAnalyzing ? 'Refreshing...' : 'Re-Run AI Assessment'}</span>
+            <span>{isAiAnalyzing ? t('overview.analyzing') : t('overview.reRunAi')}</span>
           </button>
         </div>
 
-        {/* Site Images Badge if images exist */}
+        {/* Site Images Tag */}
         {project.siteImages && project.siteImages.length > 0 && (
           <div className="pt-2 border-t border-slate-800/80 flex items-center gap-2 text-xs text-slate-400">
             <Camera className="w-3.5 h-3.5 text-emerald-400" />
@@ -160,63 +168,63 @@ export default function ProjectOverview() {
         )}
       </div>
 
-      {/* 2. Small Summary Metrics (Section 10) */}
+      {/* 2. Small Summary Metrics */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         
         {/* Metric A: Potential Recoverable Materials */}
         <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
           <span className="text-[10px] uppercase font-semibold tracking-wider text-slate-400 block">
-            Recoverable Materials
+            {t('overview.summary.potentialMaterials')}
           </span>
           <div className="text-xl font-bold font-heading text-white mt-1">
-            {items.length} <span className="text-xs font-normal text-slate-400">Streams</span>
+            {items.length} <span className="text-xs font-normal text-slate-400">{t('overview.summary.streams')}</span>
           </div>
-          <span className="text-[10px] text-slate-500">Identified on site</span>
+          <span className="text-[10px] text-slate-400">{t('overview.summary.netSalvage')}</span>
         </div>
 
         {/* Metric B: Estimated Recovery Value */}
         <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
           <span className="text-[10px] uppercase font-semibold tracking-wider text-slate-400 block">
-            Estimated Recovery
+            {t('overview.summary.estimatedValue')}
           </span>
           <div className="text-xl font-bold font-heading text-emerald-400 mt-1">
             ₹{(ledger.predictedNetValue || 0).toLocaleString('en-IN')}
           </div>
-          <span className="text-[10px] text-slate-500">Net salvage value</span>
+          <span className="text-[10px] text-slate-400">{t('overview.summary.netSalvage')}</span>
         </div>
 
         {/* Metric C: Actual Recovery */}
         <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
           <span className="text-[10px] uppercase font-semibold tracking-wider text-slate-400 block">
-            Actual Recovery
+            {t('overview.summary.actualRecovery')}
           </span>
           <div className="text-xl font-bold font-heading text-teal-300 mt-1">
             ₹{(ledger.actualNetValue || 0).toLocaleString('en-IN')}
           </div>
-          <span className="text-[10px] text-slate-500">Confirmed realized</span>
+          <span className="text-[10px] text-slate-400">{t('overview.summary.confirmedRealized')}</span>
         </div>
 
         {/* Metric D: Recovery Gap */}
         <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
           <span className="text-[10px] uppercase font-semibold tracking-wider text-amber-300 block">
-            Recovery Gap
+            {t('overview.summary.recoveryGap')}
           </span>
           <div className="text-xl font-bold font-heading text-amber-400 mt-1">
             ₹{(ledger.profitGap || 0).toLocaleString('en-IN')}
           </div>
-          <span className="text-[10px] text-amber-300/70">Unrecovered potential</span>
+          <span className="text-[10px] text-amber-300/70">{t('overview.summary.unrecoveredDeficit')}</span>
         </div>
 
       </div>
 
-      {/* 3. Clear Navigation Hub Cards to Deeper Pages (Section 10) */}
-      <div className="space-y-3">
+      {/* 3. Clearly Separated Actions */}
+      <div className="space-y-4">
         <h2 className="text-sm font-semibold uppercase tracking-wider text-slate-400">
-          Project Intelligence & Modules
+          {t('overview.actions.sectionTitle')}
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {navigationHubCards.map((card) => {
+          {actionCards.map((card) => {
             const Icon = card.icon;
             return (
               <div
@@ -245,7 +253,7 @@ export default function ProjectOverview() {
                   </p>
                 </div>
 
-                <div className="pt-2 flex items-center justify-between text-xs text-slate-400 group-hover:text-emerald-300 transition">
+                <div className="pt-2 flex items-center justify-between text-xs text-slate-400 group-hover:text-emerald-300 transition border-t border-slate-800/50">
                   <span className="text-[11px]">Open module</span>
                   <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition" />
                 </div>

@@ -10,7 +10,8 @@ import RecoveryPlanView from './components/RecoveryPlanView';
 import EconomicImpactView from './components/EconomicImpactView';
 import ActualRecoveryView from './components/ActualRecoveryView';
 import CircularityTowerView from './components/CircularityTowerView';
-import RootCauseSimulatorView from './components/RootCauseSimulatorView';
+import SimulatorView from './components/SimulatorView';
+import RootCauseView from './components/RootCauseView';
 import AdminPanelView from './components/AdminPanelView';
 import { CheckCircle2, AlertCircle, Info, Recycle } from 'lucide-react';
 
@@ -34,7 +35,8 @@ function AppContent() {
         {activeTab === 'economic' && <EconomicImpactView />}
         {activeTab === 'actuals' && <ActualRecoveryView />}
         {activeTab === 'gap' && <CircularityTowerView />}
-        {activeTab === 'simulator' && <RootCauseSimulatorView />}
+        {activeTab === 'simulator' && <SimulatorView />}
+        {activeTab === 'rootcause' && <RootCauseView />}
         {activeTab === 'admin' && <AdminPanelView />}
       </main>
 
