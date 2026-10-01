@@ -37,6 +37,16 @@ app.use((req, res, next) => {
   next();
 });
 
+// Base API Status
+app.get('/api', (req, res) => {
+  res.json({
+    status: 'ok',
+    service: 'RECLAIM X Circularity Engine',
+    version: '1.0.0',
+    documentation: '/api/health'
+  });
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({
@@ -76,13 +86,25 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`=======================================================`);
-  console.log(`🚀 RECLAIM X Backend API running on http://localhost:${PORT}`);
-  console.log(`🌿 Material Recovery & Circularity Engine Initialized`);
-  console.log(`🤖 Gemini AI Mode: ${process.env.GEMINI_API_KEY ? 'Active (API Key detected)' : 'Calibrated Statistical Engine (Fallback)'}`);
-  if (fs.existsSync(clientDistPath)) {
-    console.log(`🌐 Static Web Application mounted from ${clientDistPath}`);
-  }
-  console.log(`=======================================================`);
-});
+// Only start listening if executed directly (e.g. node src/server.js) and NOT in a serverless environment
+const isDirectExecution = Boolean(
+  process.argv[1] && (
+    process.argv[1].endsWith('server.js') || 
+    process.argv[1].endsWith('src/server.js')
+  )
+);
+
+if (isDirectExecution && process.env.VERCEL !== '1' && !process.env.VERCEL_ENV) {
+  app.listen(PORT, () => {
+    console.log(`=======================================================`);
+    console.log(`🚀 RECLAIM X Backend API running on http://localhost:${PORT}`);
+    console.log(`🌿 Material Recovery & Circularity Engine Initialized`);
+    console.log(`🤖 Gemini AI Mode: ${process.env.GEMINI_API_KEY ? 'Active (API Key detected)' : 'Calibrated Statistical Engine (Fallback)'}`);
+    if (fs.existsSync(clientDistPath)) {
+      console.log(`🌐 Static Web Application mounted from ${clientDistPath}`);
+    }
+    console.log(`=======================================================`);
+  });
+}
+
+export default app;

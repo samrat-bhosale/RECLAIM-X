@@ -7,8 +7,10 @@ import { calculateProjectLedger } from './ledgerService.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const DATA_DIR = path.join(__dirname, '../../data');
-const DB_FILE = path.join(DATA_DIR, 'store.json');
+const IS_VERCEL = Boolean(process.env.VERCEL || process.env.VERCEL_ENV);
+const BUNDLED_DB_FILE = path.join(__dirname, '../../data/store.json');
+const DATA_DIR = IS_VERCEL ? '/tmp/reclaimx' : path.join(__dirname, '../../data');
+const DB_FILE = IS_VERCEL ? path.join('/tmp/reclaimx', 'store.json') : BUNDLED_DB_FILE;
 
 import WebSocket from 'ws';
 
@@ -40,9 +42,18 @@ function ensureDataDir() {
 
 function loadLocalDb() {
   ensureDataDir();
-  if (fs.existsSync(DB_FILE)) {
+  if (IS_VERCEL && !fs.existsSync(DB_FILE) && fs.existsSync(BUNDLED_DB_FILE)) {
     try {
-      const data = fs.readFileSync(DB_FILE, 'utf8');
+      fs.copyFileSync(BUNDLED_DB_FILE, DB_FILE);
+    } catch (e) {
+      console.warn('[RECLAIM X] Could not copy initial DB to /tmp, will read bundled directly:', e.message);
+    }
+  }
+
+  const readPath = fs.existsSync(DB_FILE) ? DB_FILE : (fs.existsSync(BUNDLED_DB_FILE) ? BUNDLED_DB_FILE : null);
+  if (readPath) {
+    try {
+      const data = fs.readFileSync(readPath, 'utf8');
       memoryDb = JSON.parse(data);
     } catch (e) {
       console.error('[RECLAIM X] Error reading db file, reinitializing', e.message);
