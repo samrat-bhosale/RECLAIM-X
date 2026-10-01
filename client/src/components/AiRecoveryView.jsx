@@ -62,22 +62,29 @@ export default function AiRecoveryView() {
   };
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-300">
+    <div className="space-y-6 max-w-6xl mx-auto py-2 animate-in fade-in duration-300">
       
       {/* Header Banner */}
-      <div className="glass-panel p-6 rounded-3xl border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
+          <button
+            onClick={() => setActiveTab('overview')}
+            className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white mb-2 transition"
+          >
+            <ArrowRight className="w-3.5 h-3.5 rotate-180" />
+            Back to Project Hub
+          </button>
           <div className="flex items-center gap-2 mb-1">
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-widest bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 uppercase">
-              Gemini AI Engine
+            <span className="px-2 py-0.5 rounded text-[10px] font-bold tracking-widest bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 uppercase">
+              AI Intelligence
             </span>
-            <span className="text-xs text-slate-400">• Calibrated C&D Audit</span>
+            <span className="text-xs text-slate-400">• Pre-Demolition Yield Audit</span>
           </div>
           <h1 className="text-2xl font-bold font-heading text-white">
-            AI Recovery Intelligence & Deconstruction Sequence
+            AI Recovery Opportunities
           </h1>
           <p className="text-xs text-slate-400 mt-1">
-            Pre-demolition recovery estimates, resale valuation, and sequentially constrained salvage milestones.
+            Pre-demolition recovery estimates, resale valuation, and priority scoring.
           </p>
         </div>
 

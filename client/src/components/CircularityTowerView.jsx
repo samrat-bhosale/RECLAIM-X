@@ -34,22 +34,29 @@ export default function CircularityTowerView() {
   const items = activeProjectData?.items || [];
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-300">
+    <div className="space-y-6 max-w-5xl mx-auto py-2 animate-in fade-in duration-300">
       
       {/* Top Banner */}
-      <div className="glass-panel p-6 rounded-3xl border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
+          <button
+            onClick={() => setActiveTab('overview')}
+            className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white mb-2 transition"
+          >
+            <ArrowUpRight className="w-3.5 h-3.5 rotate-225" />
+            Back to Project Hub
+          </button>
           <div className="flex items-center gap-2 mb-1">
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-widest bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 uppercase">
-              Circularity Intelligence
+            <span className="px-2 py-0.5 rounded text-[10px] font-bold tracking-widest bg-cyan-500/15 text-cyan-300 border border-cyan-500/20 uppercase">
+              Recovery Gap
             </span>
-            <span className="text-xs text-slate-400">• Executive Control Tower</span>
+            <span className="text-xs text-slate-400">• Performance Control Tower</span>
           </div>
           <h1 className="text-2xl font-bold font-heading text-white">
-            Circularity Control Tower
+            Recovery Gap & Performance
           </h1>
           <p className="text-xs text-slate-400 mt-1">
-            Holistic cross-stream synthesis comparing predicted benchmarks against field execution yield.
+            Cross-stream synthesis comparing predicted benchmarks against field execution yield.
           </p>
         </div>
 

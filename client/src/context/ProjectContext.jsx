@@ -14,6 +14,26 @@ export function ProjectProvider({ children }) {
   const [notification, setNotification] = useState(null);
   const [systemHealth, setSystemHealth] = useState(null);
 
+  // User Profile & Role (Default: normal user; toggleable for Admin Panel testing)
+  const [currentUser, setCurrentUser] = useState({
+    id: 'user-01',
+    name: 'Alex Morgan',
+    email: 'alex.m@circulardemo.io',
+    role: 'user' // 'user' or 'admin'
+  });
+
+  const toggleUserRole = useCallback(() => {
+    setCurrentUser(prev => {
+      const newRole = prev.role === 'admin' ? 'user' : 'admin';
+      showNotification(`Switched role to ${newRole.toUpperCase()}`, 'info');
+      // If switching to user while on admin tab, redirect to dashboard
+      if (newRole === 'user' && activeTab === 'admin') {
+        setActiveTab('dashboard');
+      }
+      return { ...prev, role: newRole };
+    });
+  }, [activeTab]);
+
   const showNotification = useCallback((message, type = 'success') => {
     setNotification({ message, type });
     setTimeout(() => {
@@ -39,13 +59,13 @@ export function ProjectProvider({ children }) {
     }
   }, [activeProjectId, showNotification]);
 
-  const selectProject = useCallback(async (projectId, switchToOverview = true) => {
+  const selectProject = useCallback(async (projectId, switchToOverview = false) => {
     try {
       setIsLoading(true);
       setActiveProjectId(projectId);
       const fullData = await api.getProjectById(projectId);
       setActiveProjectData(fullData);
-      if (switchToOverview && activeTab === 'dashboard') {
+      if (switchToOverview) {
         setActiveTab('overview');
       }
     } catch (err) {
@@ -54,7 +74,7 @@ export function ProjectProvider({ children }) {
     } finally {
       setIsLoading(false);
     }
-  }, [activeTab, showNotification]);
+  }, [showNotification]);
 
   const handleLoadDemoProject = useCallback(async () => {
     try {
@@ -64,8 +84,8 @@ export function ProjectProvider({ children }) {
       
       try {
         confetti({
-          particleCount: 60,
-          spread: 70,
+          particleCount: 40,
+          spread: 60,
           origin: { y: 0.2 },
           colors: ['#10b981', '#06b6d4', '#3b82f6']
         });
@@ -74,7 +94,7 @@ export function ProjectProvider({ children }) {
       }
 
       await loadProjects(demoData.project.id);
-      setActiveTab('intelligence');
+      setActiveTab('overview');
     } catch (err) {
       console.error('Failed to load demo:', err);
       showNotification('Error loading demo project', 'error');
@@ -83,11 +103,31 @@ export function ProjectProvider({ children }) {
     }
   }, [loadProjects, showNotification]);
 
-  const handleCreateProject = useCallback(async (formData) => {
+  const handleCreateProject = useCallback(async (formData, runImmediateAudit = true) => {
     try {
       setIsLoading(true);
       const created = await api.createProject(formData);
-      showNotification(`Project "${created.name}" created successfully!`, 'success');
+      showNotification(`Project "${created.name}" created!`, 'success');
+      
+      // Optionally run immediate salvage analysis
+      if (runImmediateAudit) {
+        setIsAiAnalyzing(true);
+        try {
+          await api.analyzeSalvage({
+            projectId: created.id,
+            buildingType: created.buildingType,
+            areaSqft: Number(created.areaSqft),
+            location: created.location,
+            siteNotes: created.siteNotes || '',
+            confirmedMaterials: formData.confirmedMaterials || []
+          });
+        } catch (auditErr) {
+          console.warn('Initial audit warning:', auditErr);
+        } finally {
+          setIsAiAnalyzing(false);
+        }
+      }
+
       await loadProjects(created.id);
       setActiveTab('overview');
       return created;
@@ -100,6 +140,16 @@ export function ProjectProvider({ children }) {
     }
   }, [loadProjects, showNotification]);
 
+  const detectSiteMaterials = useCallback(async (images, projectContext = {}) => {
+    try {
+      const result = await api.detectMaterials(images, projectContext);
+      return result;
+    } catch (err) {
+      console.error('Image analysis error:', err);
+      throw err;
+    }
+  }, []);
+
   const handleRunAiAnalysis = useCallback(async () => {
     if (!activeProjectData?.project) return;
     try {
@@ -110,7 +160,8 @@ export function ProjectProvider({ children }) {
         buildingType: project.buildingType,
         areaSqft: Number(project.areaSqft),
         location: project.location,
-        siteNotes: project.siteNotes || ''
+        siteNotes: project.siteNotes || '',
+        confirmedMaterials: project.confirmedMaterials || []
       });
 
       showNotification('AI Recovery Intelligence analysis completed!', 'success');
@@ -168,10 +219,13 @@ export function ProjectProvider({ children }) {
         notification,
         showNotification,
         systemHealth,
+        currentUser,
+        toggleUserRole,
         loadProjects,
         selectProject,
         loadDemoProject: handleLoadDemoProject,
         createProject: handleCreateProject,
+        detectSiteMaterials,
         runAiAnalysis: handleRunAiAnalysis,
         updateActuals: handleUpdateActuals,
         toggleSequenceStep: handleToggleStep,

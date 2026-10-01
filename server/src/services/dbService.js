@@ -299,6 +299,8 @@ export const dbService = {
       areaSqft: Number(data.areaSqft),
       status: data.status || 'Planning',
       siteNotes: data.siteNotes || '',
+      siteImages: data.siteImages || [],
+      confirmedMaterials: data.confirmedMaterials || [],
       createdAt: now,
       updatedAt: now
     };
@@ -317,6 +319,17 @@ export const dbService = {
     }
 
     memoryDb.projects.unshift(newProject);
+    
+    // Automatically record admin audit log
+    if (!memoryDb.admin_audit_logs) memoryDb.admin_audit_logs = [];
+    memoryDb.admin_audit_logs.unshift({
+      id: uuidv4(),
+      timestamp: now,
+      action: 'PROJECT_CREATED',
+      details: `Created project "${newProject.name}" (${newProject.buildingType}, ${newProject.areaSqft} sq.ft)`,
+      projectContext: newProject.name
+    });
+
     saveLocalDb();
     return newProject;
   },
@@ -336,10 +349,23 @@ export const dbService = {
   },
 
   async deleteProject(id) {
+    const proj = memoryDb.projects.find(p => p.id === id);
     memoryDb.projects = memoryDb.projects.filter(p => p.id !== id);
     memoryDb.recovery_items = memoryDb.recovery_items.filter(i => (i.projectId || i.project_id) !== id);
     memoryDb.recovery_sequences = memoryDb.recovery_sequences.filter(s => (s.projectId || s.project_id) !== id);
     memoryDb.project_ledgers = memoryDb.project_ledgers.filter(l => (l.projectId || l.project_id) !== id);
+    
+    if (proj) {
+      if (!memoryDb.admin_audit_logs) memoryDb.admin_audit_logs = [];
+      memoryDb.admin_audit_logs.unshift({
+        id: uuidv4(),
+        timestamp: new Date().toISOString(),
+        action: 'PROJECT_DELETED',
+        details: `Deleted project "${proj.name}"`,
+        projectContext: proj.name
+      });
+    }
+
     saveLocalDb();
     return true;
   },
@@ -451,5 +477,57 @@ export const dbService = {
   async loadDemoProject() {
     seedDemoProjectInternal();
     return this.getProjectById('demo-project-abc-tech-park');
+  },
+
+  async recordAdminAuditLog(logEntry) {
+    if (!memoryDb.admin_audit_logs) memoryDb.admin_audit_logs = [];
+    const entry = {
+      id: uuidv4(),
+      timestamp: new Date().toISOString(),
+      ...logEntry
+    };
+    memoryDb.admin_audit_logs.unshift(entry);
+    if (memoryDb.admin_audit_logs.length > 100) memoryDb.admin_audit_logs.pop();
+    saveLocalDb();
+    return entry;
+  },
+
+  async getAdminAuditLogs() {
+    if (!memoryDb.admin_audit_logs || memoryDb.admin_audit_logs.length === 0) {
+      memoryDb.admin_audit_logs = [
+        {
+          id: 'log-seed-1',
+          timestamp: new Date().toISOString(),
+          action: 'SYSTEM_BOOT',
+          details: 'RECLAIM X Circularity Engine initialized',
+          projectContext: 'System'
+        }
+      ];
+    }
+    return memoryDb.admin_audit_logs;
+  },
+
+  async getAdminSystemStats() {
+    const totalProjects = memoryDb.projects?.length || 0;
+    const totalItems = memoryDb.recovery_items?.length || 0;
+    const totalSequences = memoryDb.recovery_sequences?.length || 0;
+    let totalDivertedTonnes = 0;
+    let totalNetValue = 0;
+
+    for (const ledger of (memoryDb.project_ledgers || [])) {
+      totalDivertedTonnes += Number(ledger.wasteDivertedTonnes || ledger.waste_diverted_tonnes || 0);
+      totalNetValue += Number(ledger.predictedNetValue || ledger.predicted_net_value || 0);
+    }
+
+    const auditCount = memoryDb.admin_audit_logs ? memoryDb.admin_audit_logs.length : 1;
+
+    return {
+      totalProjects,
+      totalRecoveryStreams: totalItems,
+      totalSequenceSteps: totalSequences,
+      totalDivertedTonnes: Number(totalDivertedTonnes.toFixed(2)),
+      totalProjectedSalvageNetValue: Math.round(totalNetValue),
+      auditEventsRecorded: auditCount
+    };
   }
 };

@@ -7,6 +7,7 @@ import { fileURLToPath } from 'url';
 
 import projectRoutes from './routes/projectRoutes.js';
 import aiRoutes from './routes/aiRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -21,10 +22,12 @@ const PORT = process.env.PORT || 5001;
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-user-role']
 }));
 
-app.use(express.json());
+// Body parser with 25mb limit for site image uploads
+app.use(express.json({ limit: '25mb' }));
+app.use(express.urlencoded({ limit: '25mb', extended: true }));
 
 // Request logger for hackathon observability
 app.use((req, res, next) => {
@@ -48,6 +51,7 @@ app.get('/api/health', (req, res) => {
 // Mount API Routes
 app.use('/api/v1/projects', projectRoutes);
 app.use('/api/v1/ai', aiRoutes);
+app.use('/api/v1/admin', adminRoutes);
 
 // API 404 handler
 app.use('/api/*', (req, res) => {

@@ -78,6 +78,17 @@ export const api = {
     return data.data;
   },
 
+  async detectMaterials(images, projectContext = {}) {
+    const res = await fetch(`${API_BASE}/ai/detect-materials`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ images, projectContext }),
+    });
+    const data = await res.json();
+    if (!data.success) throw new Error(data.error || 'Failed to analyze site images');
+    return data.data;
+  },
+
   async analyzeSalvage(payload) {
     const res = await fetch(`${API_BASE}/ai/analyze-salvage`, {
       method: 'POST',
@@ -108,6 +119,24 @@ export const api = {
     });
     const data = await res.json();
     if (!data.success) throw new Error(data.error || 'Failed to run counterfactual simulation');
+    return data.data;
+  },
+
+  async getAdminStats(role = 'admin') {
+    const res = await fetch(`${API_BASE}/admin/stats`, {
+      headers: { 'x-user-role': role }
+    });
+    const data = await res.json();
+    if (!data.success) throw new Error(data.error || 'Failed to fetch admin stats');
+    return data.data;
+  },
+
+  async getAdminAuditLogs(role = 'admin') {
+    const res = await fetch(`${API_BASE}/admin/audit-logs`, {
+      headers: { 'x-user-role': role }
+    });
+    const data = await res.json();
+    if (!data.success) throw new Error(data.error || 'Failed to fetch admin audit logs');
     return data.data;
   }
 };

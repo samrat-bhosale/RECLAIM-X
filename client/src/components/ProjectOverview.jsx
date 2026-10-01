@@ -3,17 +3,18 @@ import {
   Building2,
   MapPin,
   Layers,
+  ArrowRight,
+  BrainCircuit,
+  ClipboardList,
+  Coins,
+  CheckCircle2,
+  AlertOctagon,
+  GitBranch,
   Calendar,
   Sparkles,
-  ArrowRight,
-  ClipboardList,
-  Cpu,
-  Clock,
-  ShieldCheck,
-  AlertCircle
+  Camera
 } from 'lucide-react';
 import { useProject } from '../context/ProjectContext';
-import { SafetyDisclaimerNotice } from './AiSafetyBadge';
 
 export default function ProjectOverview() {
   const {
@@ -27,17 +28,22 @@ export default function ProjectOverview() {
   const project = activeProjectData?.project;
   const items = activeProjectData?.items || [];
   const sequences = activeProjectData?.sequences || [];
-  const ledger = activeProjectData?.ledger;
+  const ledger = activeProjectData?.ledger || {
+    predictedNetValue: 0,
+    actualNetValue: 0,
+    profitGap: 0,
+    wasteDivertedTonnes: 0
+  };
 
   if (!project) {
     return (
-      <div className="glass-panel p-12 rounded-3xl text-center space-y-4 max-w-xl mx-auto my-12">
-        <Building2 className="w-12 h-12 text-slate-500 mx-auto" />
-        <h2 className="text-xl font-bold font-heading text-white">No Project Selected</h2>
-        <p className="text-xs text-slate-400">Please choose a project or load our pre-configured demo project to get started.</p>
+      <div className="p-12 rounded-2xl bg-slate-900/40 border border-slate-800 text-center space-y-4 max-w-lg mx-auto my-8">
+        <Building2 className="w-10 h-10 text-slate-500 mx-auto" />
+        <h2 className="text-base font-bold text-white">No Project Selected</h2>
+        <p className="text-xs text-slate-400">Select an existing project or load our pre-configured demo project.</p>
         <button
           onClick={loadDemoProject}
-          className="px-5 py-2.5 rounded-xl text-xs font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition"
+          className="px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition"
         >
           Load Demo Project
         </button>
@@ -45,154 +51,209 @@ export default function ProjectOverview() {
     );
   }
 
-  const isAnalyzed = items.length > 0;
+  // Navigation Hub Cards (Section 10)
+  const navigationHubCards = [
+    {
+      id: 'intelligence',
+      title: 'AI Recovery Intelligence',
+      desc: 'Detected materials, recoverability estimates, and AI reasoning evidence.',
+      icon: BrainCircuit,
+      color: 'text-cyan-400',
+      badge: `${items.length} Streams`
+    },
+    {
+      id: 'plan',
+      title: 'Recovery Plan',
+      desc: 'Recommended chronological deconstruction sequence and impact risk alerts.',
+      icon: ClipboardList,
+      color: 'text-emerald-400',
+      badge: `${sequences.length} Steps`
+    },
+    {
+      id: 'economic',
+      title: 'Economic Impact',
+      desc: 'Gross salvage revenue, landfill tipping fee avoidance, and labor costs breakdown.',
+      icon: Coins,
+      color: 'text-teal-400',
+      badge: `₹${(ledger.predictedNetValue || 0).toLocaleString('en-IN')}`
+    },
+    {
+      id: 'actuals',
+      title: 'Actual Recovery',
+      desc: 'Log field reclaimed quantities, broken materials, and on-site notes.',
+      icon: CheckCircle2,
+      color: 'text-blue-400',
+      badge: 'Field Logger'
+    },
+    {
+      id: 'gap',
+      title: 'Recovery Gap & Root Cause',
+      desc: 'Compare predicted vs actual recovery and diagnose why recovery was lost.',
+      icon: AlertOctagon,
+      color: 'text-amber-400',
+      badge: `₹${(ledger.profitGap || 0).toLocaleString('en-IN')} Gap`
+    },
+    {
+      id: 'simulator',
+      title: 'Counterfactual Simulator',
+      desc: 'Reorder deconstruction steps to test sensitivity to early demolition.',
+      icon: GitBranch,
+      color: 'text-purple-400',
+      badge: 'What-If Model'
+    }
+  ];
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-300">
+    <div className="space-y-8 max-w-5xl mx-auto py-2 animate-in fade-in duration-300">
       
-      {/* Top Banner with Project Identity */}
-      <div className="glass-panel rounded-3xl p-6 sm:p-8 border border-slate-800 relative overflow-hidden">
-        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-          <div className="space-y-2">
-            <div className="flex items-center gap-3">
-              <span className="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+      {/* 1. Project Information Header (Section 10) */}
+      <div className="p-6 sm:p-7 rounded-2xl bg-slate-900/70 border border-slate-800 space-y-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="px-2.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/20">
                 {project.status || 'Planning'}
               </span>
-              <span className="text-xs text-slate-400">
-                ID: <span className="font-mono text-slate-300">{project.id}</span>
+              <span className="text-[11px] text-slate-400">
+                Project ID: <span className="font-mono text-slate-300">{project.id}</span>
               </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold font-heading text-white">
+
+            <h1 className="text-2xl font-bold font-heading text-white">
               {project.name}
             </h1>
-            <div className="flex flex-wrap items-center gap-4 text-xs text-slate-300 pt-1">
+
+            <div className="flex flex-wrap items-center gap-3 text-xs text-slate-400 pt-1">
               <span className="flex items-center gap-1.5">
-                <MapPin className="w-4 h-4 text-emerald-400" />
+                <MapPin className="w-3.5 h-3.5 text-slate-500" />
                 {project.location}
               </span>
               <span>•</span>
               <span className="flex items-center gap-1.5">
-                <Building2 className="w-4 h-4 text-teal-400" />
+                <Building2 className="w-3.5 h-3.5 text-slate-500" />
                 {project.buildingType}
               </span>
               <span>•</span>
               <span className="flex items-center gap-1.5">
-                <Layers className="w-4 h-4 text-cyan-400" />
+                <Layers className="w-3.5 h-3.5 text-slate-500" />
                 {Number(project.areaSqft || project.area_sqft || 0).toLocaleString()} sq.ft.
               </span>
             </div>
           </div>
 
-          {/* Action Trigger Buttons (PRD Section 13 Screen 2) */}
-          <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
-            <button
-              onClick={runAiAnalysis}
-              disabled={isAiAnalyzing}
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl text-xs font-bold bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 shadow-lg shadow-emerald-500/20 transition-all disabled:opacity-50"
-            >
-              <Cpu className="w-4 h-4" />
-              {isAiAnalyzing ? 'Analyzing with Gemini...' : (isAnalyzed ? 'Re-Analyze Recovery' : 'Analyze Recovery')}
-            </button>
-            <button
-              onClick={() => setActiveTab('intelligence')}
-              className="inline-flex items-center gap-2 px-4 py-3 rounded-2xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-700 transition"
-            >
-              <ClipboardList className="w-4 h-4 text-emerald-400" />
-              View Recovery Plan
-            </button>
-            <button
-              onClick={() => setActiveTab('actuals')}
-              className="inline-flex items-center gap-2 px-4 py-3 rounded-2xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-700 transition"
-            >
-              Record Actuals
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
+          <button
+            onClick={runAiAnalysis}
+            disabled={isAiAnalyzing}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition shrink-0"
+          >
+            <BrainCircuit className="w-3.5 h-3.5 text-cyan-400" />
+            <span>{isAiAnalyzing ? 'Refreshing...' : 'Re-Run AI Assessment'}</span>
+          </button>
         </div>
+
+        {/* Site Images Badge if images exist */}
+        {project.siteImages && project.siteImages.length > 0 && (
+          <div className="pt-2 border-t border-slate-800/80 flex items-center gap-2 text-xs text-slate-400">
+            <Camera className="w-3.5 h-3.5 text-emerald-400" />
+            <span>{project.siteImages.length} site photo(s) analyzed for material identification</span>
+          </div>
+        )}
       </div>
 
-      {/* Specifications & Notes Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* 2. Small Summary Metrics (Section 10) */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         
-        {/* Site Details Card */}
-        <div className="glass-panel p-6 rounded-2xl border border-slate-800 space-y-4">
-          <h2 className="text-sm font-bold font-heading uppercase tracking-wider text-slate-300">
-            Project Specifications
-          </h2>
-          <div className="space-y-3 text-xs">
-            <div className="flex justify-between py-2 border-b border-slate-800/80">
-              <span className="text-slate-400">Typology</span>
-              <span className="font-semibold text-white">{project.buildingType}</span>
-            </div>
-            <div className="flex justify-between py-2 border-b border-slate-800/80">
-              <span className="text-slate-400">Gross Floor Area</span>
-              <span className="font-semibold text-white">{Number(project.areaSqft || project.area_sqft || 0).toLocaleString()} sq.ft.</span>
-            </div>
-            <div className="flex justify-between py-2 border-b border-slate-800/80">
-              <span className="text-slate-400">Site Location</span>
-              <span className="font-semibold text-white">{project.location}</span>
-            </div>
-            <div className="flex justify-between py-2">
-              <span className="text-slate-400">Lifecycle Phase</span>
-              <span className="font-semibold text-emerald-400">{project.status}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Site Inspection Notes */}
-        <div className="md:col-span-2 glass-panel p-6 rounded-2xl border border-slate-800 space-y-3">
-          <h2 className="text-sm font-bold font-heading uppercase tracking-wider text-slate-300">
-            Site Notes & Material Observations
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed bg-slate-900/60 p-4 rounded-xl border border-slate-800/80">
-            {project.siteNotes || project.site_notes || 'No detailed inspection notes entered yet. AI will use regional statistical inference models.'}
-          </p>
-          <div className="flex items-center gap-2 text-[11px] text-slate-400 pt-2">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Inspection notes are passed directly into Gemini AI for targeted material classification.</span>
-          </div>
-        </div>
-
-      </div>
-
-      {/* Recovery Status Bar */}
-      <div className="glass-panel p-6 rounded-2xl border border-slate-800">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
-          <div>
-            <h2 className="text-sm font-bold font-heading text-white">Salvage Status Snapshot</h2>
-            <p className="text-xs text-slate-400">Audit status and recoverable item counts</p>
-          </div>
-          <span className="text-xs font-mono text-emerald-400 font-semibold">
-            {items.length} Recoverable Streams Identified
+        {/* Metric A: Potential Recoverable Materials */}
+        <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+          <span className="text-[10px] uppercase font-semibold tracking-wider text-slate-400 block">
+            Recoverable Materials
           </span>
+          <div className="text-xl font-bold font-heading text-white mt-1">
+            {items.length} <span className="text-xs font-normal text-slate-400">Streams</span>
+          </div>
+          <span className="text-[10px] text-slate-500">Identified on site</span>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div className="bg-slate-900/60 p-3.5 rounded-xl border border-slate-800">
-            <span className="text-[10px] text-slate-400 uppercase tracking-wider block">Identified Streams</span>
-            <span className="text-xl font-bold text-white mt-1 block">{items.length}</span>
+        {/* Metric B: Estimated Recovery Value */}
+        <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+          <span className="text-[10px] uppercase font-semibold tracking-wider text-slate-400 block">
+            Estimated Recovery
+          </span>
+          <div className="text-xl font-bold font-heading text-emerald-400 mt-1">
+            ₹{(ledger.predictedNetValue || 0).toLocaleString('en-IN')}
           </div>
-          <div className="bg-slate-900/60 p-3.5 rounded-xl border border-slate-800">
-            <span className="text-[10px] text-slate-400 uppercase tracking-wider block">Sequence Steps</span>
-            <span className="text-xl font-bold text-teal-300 mt-1 block">{sequences.length}</span>
-          </div>
-          <div className="bg-slate-900/60 p-3.5 rounded-xl border border-slate-800">
-            <span className="text-[10px] text-slate-400 uppercase tracking-wider block">Expected Net Value</span>
-            <span className="text-xl font-bold text-emerald-400 mt-1 block">
-              ₹{(ledger?.predictedNetValue || 0).toLocaleString('en-IN')}
-            </span>
-          </div>
-          <div className="bg-slate-900/60 p-3.5 rounded-xl border border-slate-800">
-            <span className="text-[10px] text-slate-400 uppercase tracking-wider block">Estimated Diversion</span>
-            <span className="text-xl font-bold text-cyan-300 mt-1 block">
-              {ledger?.wasteDivertedTonnes || 0} T
-            </span>
-          </div>
+          <span className="text-[10px] text-slate-500">Net salvage value</span>
         </div>
+
+        {/* Metric C: Actual Recovery */}
+        <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+          <span className="text-[10px] uppercase font-semibold tracking-wider text-slate-400 block">
+            Actual Recovery
+          </span>
+          <div className="text-xl font-bold font-heading text-teal-300 mt-1">
+            ₹{(ledger.actualNetValue || 0).toLocaleString('en-IN')}
+          </div>
+          <span className="text-[10px] text-slate-500">Confirmed realized</span>
+        </div>
+
+        {/* Metric D: Recovery Gap */}
+        <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+          <span className="text-[10px] uppercase font-semibold tracking-wider text-amber-300 block">
+            Recovery Gap
+          </span>
+          <div className="text-xl font-bold font-heading text-amber-400 mt-1">
+            ₹{(ledger.profitGap || 0).toLocaleString('en-IN')}
+          </div>
+          <span className="text-[10px] text-amber-300/70">Unrecovered potential</span>
+        </div>
+
       </div>
 
-      {/* Safety Notice */}
-      <SafetyDisclaimerNotice />
+      {/* 3. Clear Navigation Hub Cards to Deeper Pages (Section 10) */}
+      <div className="space-y-3">
+        <h2 className="text-sm font-semibold uppercase tracking-wider text-slate-400">
+          Project Intelligence & Modules
+        </h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {navigationHubCards.map((card) => {
+            const Icon = card.icon;
+            return (
+              <div
+                key={card.id}
+                onClick={() => setActiveTab(card.id)}
+                className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-slate-700 transition cursor-pointer flex flex-col justify-between space-y-4 group"
+              >
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className={`w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center ${card.color}`}>
+                      <Icon className="w-4 h-4" />
+                    </div>
+                    {card.badge && (
+                      <span className="text-[10px] font-semibold text-slate-400 bg-slate-800/80 px-2 py-0.5 rounded">
+                        {card.badge}
+                      </span>
+                    )}
+                  </div>
+
+                  <h3 className="text-sm font-bold text-white group-hover:text-emerald-400 transition">
+                    {card.title}
+                  </h3>
+
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    {card.desc}
+                  </p>
+                </div>
+
+                <div className="pt-2 flex items-center justify-between text-xs text-slate-400 group-hover:text-emerald-300 transition">
+                  <span className="text-[11px]">Open module</span>
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition" />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
 
     </div>
   );

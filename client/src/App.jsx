@@ -1,53 +1,53 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ProjectProvider, useProject } from './context/ProjectContext';
 import Navbar from './components/Navbar';
 import Dashboard from './components/Dashboard';
+import ProjectsView from './components/ProjectsView';
+import CreateProjectWizard from './components/CreateProjectWizard';
 import ProjectOverview from './components/ProjectOverview';
 import AiRecoveryView from './components/AiRecoveryView';
+import RecoveryPlanView from './components/RecoveryPlanView';
 import EconomicImpactView from './components/EconomicImpactView';
 import ActualRecoveryView from './components/ActualRecoveryView';
 import CircularityTowerView from './components/CircularityTowerView';
 import RootCauseSimulatorView from './components/RootCauseSimulatorView';
-import CreateProjectModal from './components/CreateProjectModal';
-import { CheckCircle2, AlertCircle, Info, Sparkles, Recycle } from 'lucide-react';
+import AdminPanelView from './components/AdminPanelView';
+import { CheckCircle2, AlertCircle, Info, Recycle } from 'lucide-react';
 
 function AppContent() {
-  const { activeTab, notification } = useProject();
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const { activeTab, notification, currentUser } = useProject();
 
   return (
     <div className="min-h-screen flex flex-col bg-[#090d16] text-slate-100 selection:bg-emerald-500 selection:text-slate-950">
       
-      {/* Navigation Header */}
-      <Navbar onOpenNewProject={() => setIsCreateModalOpen(true)} />
+      {/* Minimal Navigation Header */}
+      <Navbar />
 
       {/* Main Screen Content */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {activeTab === 'dashboard' && <Dashboard onOpenNewProject={() => setIsCreateModalOpen(true)} />}
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {activeTab === 'dashboard' && <Dashboard />}
+        {activeTab === 'projects' && <ProjectsView />}
+        {activeTab === 'create' && <CreateProjectWizard />}
         {activeTab === 'overview' && <ProjectOverview />}
         {activeTab === 'intelligence' && <AiRecoveryView />}
+        {activeTab === 'plan' && <RecoveryPlanView />}
         {activeTab === 'economic' && <EconomicImpactView />}
         {activeTab === 'actuals' && <ActualRecoveryView />}
-        {activeTab === 'control-tower' && <CircularityTowerView />}
+        {activeTab === 'gap' && <CircularityTowerView />}
         {activeTab === 'simulator' && <RootCauseSimulatorView />}
+        {activeTab === 'admin' && <AdminPanelView />}
       </main>
-
-      {/* Modal for Creating New Project */}
-      <CreateProjectModal
-        isOpen={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
-      />
 
       {/* Toast Notification Banner */}
       {notification && (
         <div className="fixed bottom-6 right-6 z-50 animate-in slide-in-from-bottom duration-300">
           <div
-            className={`flex items-center gap-3 px-4 py-3 rounded-2xl shadow-2xl border text-xs font-semibold backdrop-blur-xl ${
+            className={`flex items-center gap-3 px-4 py-3 rounded-2xl shadow-xl border text-xs font-semibold backdrop-blur-xl ${
               notification.type === 'error'
-                ? 'bg-rose-950/90 text-rose-200 border-rose-500/50 shadow-rose-950/50'
+                ? 'bg-rose-950/90 text-rose-200 border-rose-500/50'
                 : notification.type === 'info'
-                ? 'bg-blue-950/90 text-blue-200 border-blue-500/50 shadow-blue-950/50'
-                : 'bg-emerald-950/90 text-emerald-200 border-emerald-500/50 shadow-emerald-950/50'
+                ? 'bg-blue-950/90 text-blue-200 border-blue-500/50'
+                : 'bg-emerald-950/90 text-emerald-200 border-emerald-500/50'
             }`}
           >
             {notification.type === 'error' ? (
@@ -62,21 +62,21 @@ function AppContent() {
         </div>
       )}
 
-      {/* Modern Footer */}
-      <footer className="border-t border-slate-900 bg-slate-950/80 py-8 px-4 sm:px-6 lg:px-8 text-xs text-slate-500 mt-auto">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      {/* Minimal Clean Footer */}
+      <footer className="border-t border-slate-900/80 bg-slate-950/60 py-6 px-4 sm:px-6 lg:px-8 text-xs text-slate-500 mt-auto">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
-              <Recycle className="w-3.5 h-3.5" />
+            <div className="w-5 h-5 rounded-md bg-emerald-500/15 text-emerald-400 flex items-center justify-center">
+              <Recycle className="w-3 h-3" />
             </div>
-            <span className="font-bold text-slate-300">RECLAIM X</span>
-            <span>— AI Circularity & Material Recovery Platform for Construction & Demolition</span>
+            <span className="font-semibold text-slate-300">RECLAIM X</span>
+            <span className="hidden sm:inline">• AI Material Recovery & Circularity Platform</span>
           </div>
 
-          <div className="flex items-center gap-4 text-slate-400">
-            <span>Stack: React + Vite + Node.js + Express + Gemini AI + Supabase</span>
+          <div className="flex items-center gap-3 text-slate-400 text-[11px]">
+            <span>Active Role: <strong className="text-emerald-400 uppercase font-mono">{currentUser?.role}</strong></span>
             <span>•</span>
-            <span className="text-emerald-400 font-semibold">Hackathon MVP</span>
+            <span>C&D Demolition Intelligence</span>
           </div>
         </div>
       </footer>

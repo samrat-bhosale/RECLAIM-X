@@ -35,28 +35,35 @@ export default function EconomicImpactView() {
   const items = activeProjectData?.items || [];
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-300">
+    <div className="space-y-6 max-w-5xl mx-auto py-2 animate-in fade-in duration-300">
       
       {/* Top Banner */}
-      <div className="glass-panel p-6 rounded-3xl border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
+          <button
+            onClick={() => setActiveTab('overview')}
+            className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white mb-2 transition"
+          >
+            <ArrowRight className="w-3.5 h-3.5 rotate-180" />
+            Back to Project Hub
+          </button>
           <div className="flex items-center gap-2 mb-1">
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-widest bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 uppercase">
-              Demolition Circular Economics
+            <span className="px-2 py-0.5 rounded text-[10px] font-bold tracking-widest bg-emerald-500/15 text-emerald-400 border border-emerald-500/20 uppercase">
+              Circular Economics
             </span>
             <span className="text-xs text-slate-400">• Standardized PRD Formulation</span>
           </div>
           <h1 className="text-2xl font-bold font-heading text-white">
-            Economic Impact & Net Recovery Valuation
+            Economic Impact & Valuation
           </h1>
           <p className="text-xs text-slate-400 mt-1">
-            Transparent mathematical accounting separating gross salvage revenue, landfill tipping savings, and selective labor costs.
+            Transparent accounting separating gross salvage revenue, landfill tipping savings, and selective labor costs.
           </p>
         </div>
 
         <button
           onClick={() => setActiveTab('actuals')}
-          className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition shadow-md shadow-emerald-500/20"
+          className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-semibold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition shadow-sm"
         >
           <span>Record Field Actuals</span>
           <ArrowRight className="w-3.5 h-3.5" />
